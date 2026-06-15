@@ -158,7 +158,30 @@ const DB = {
     },
 
     // ==================== STORAGE ====================
+    async convertToJpeg(file) {
+        if (!file.type.startsWith('image/') || file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/webp') {
+            return file;
+        }
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                canvas.getContext('2d').drawImage(img, 0, 0);
+                canvas.toBlob((blob) => {
+                    resolve(new File([blob], file.name.replace(/\.[^.]+$/, '.jpg'), { type: 'image/jpeg' }));
+                }, 'image/jpeg', 0.9);
+            };
+            img.onerror = () => resolve(file);
+            img.src = URL.createObjectURL(file);
+        });
+    },
+
     async uploadMedia(file, folder) {
+        if (file.type.startsWith('image/')) {
+            file = await this.convertToJpeg(file);
+        }
         const ext = file.name.split('.').pop();
         const path = folder + '/' + Date.now() + '_' + Math.random().toString(36).slice(2) + '.' + ext;
         const { data, error } = await db.storage.from('bundle-media').upload(path, file);
