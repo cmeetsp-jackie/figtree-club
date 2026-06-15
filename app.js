@@ -117,65 +117,57 @@
 
     // ==================== MAIN PAGE ====================
     function initMain() {
-        // Hardcoded fallback products (shown if no DB bundles exist)
-        const products = [
-            { id: 'ralph-polo', name: '랄프 로렌 폴로', price: 239000, original: 383000 },
-            { id: 'nike-jacket', name: '나이키 자켓 #1', price: 780000, original: 780000 },
-            { id: 'ua-shorts', name: '언더아머 반바지', price: 79000, original: 107000 },
-            { id: 'champion-hoodie', name: '챔피온 리버스위브 후디', price: 580000, original: 720000 },
-            { id: 'levis-denim', name: '리바이스 501 데님 믹스', price: 650000, original: 1180000 },
-            { id: 'adidas-tracktop', name: '아디다스 빈티지 트랙탑', price: 340000, original: 480000 }
-        ];
-        const cards = document.querySelectorAll('article.bundle-card');
-
-        cards.forEach((card, i) => {
-            if (!products[i]) return;
-            const p = products[i];
-            p.img = card.querySelector('img')?.src || '';
-
-            card.addEventListener('click', (e) => {
-                if (e.target.closest('button')) return;
-                window.location.href = link('bundleinfo.html');
-            });
-
+        // Helper to create a bundle card element
+        function createBundleCard(b) {
+            const perPiece = b.quantity > 0 ? Math.round(b.price / b.quantity) : 0;
+            const photo = b.photos && b.photos[0] ? b.photos[0] : 'https://placehold.co/400x500/f5f5f5/999?text=No+Image';
+            const supplier = b.sellers ? b.sellers.business_name : '';
+            const card = document.createElement('article');
+            card.className = 'bundle-card flex flex-col gap-stack-sm bg-surface rounded-xl overflow-hidden border border-outline-variant transition-shadow cursor-pointer relative group';
+            card.onclick = () => { window.location.href = link('bundleinfo.html') + '?id=' + b.id; };
+            card.innerHTML =
+                '<div class="relative aspect-[4/5] bg-surface-container-low overflow-hidden">' +
+                '<img alt="' + b.name + '" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="' + photo + '" onerror="this.src=\'https://placehold.co/400x500/f5f5f5/999?text=No+Image\'">' +
+                (b.grade ? '<div class="absolute top-3 left-3 bg-accent text-on-accent px-2.5 py-1 rounded-full text-xs font-label-caps tracking-wider">' + b.grade + '</div>' : '') +
+                '<button class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface/80 backdrop-blur flex items-center justify-center text-primary hover:bg-surface transition-colors">' +
+                '<span class="material-symbols-outlined text-[18px]">favorite</span></button></div>' +
+                '<div class="p-stack-md flex flex-col gap-1">' +
+                '<div class="flex justify-between items-start">' +
+                '<h4 class="font-title-md text-title-md text-primary truncate pr-2">' + b.name + '</h4></div>' +
+                '<p class="font-body-sm text-body-sm text-secondary">' + supplier + '</p>' +
+                '<div class="mt-2 flex items-baseline gap-2">' +
+                '<span class="font-headline-lg-mobile text-headline-lg-mobile text-primary">₩' + b.price.toLocaleString('ko-KR') + '</span></div>' +
+                '<span class="text-xs text-secondary mt-1">개당 ₩' + perPiece.toLocaleString('ko-KR') + ' · ' + b.quantity + '개</span></div>';
             const favBtn = card.querySelector('button');
-            if (favBtn) setupFavBtn(favBtn, p.id);
-        });
+            if (favBtn) setupFavBtn(favBtn, b.id);
+            return card;
+        }
 
-        // Load real bundles from Supabase and add to grid
+        // Load all bundles from DB
         if (typeof DB !== 'undefined') {
-            DB.getAllBundles({ limit: 20 }).then(bundles => {
+            DB.getAllBundles({ limit: 30 }).then(bundles => {
                 if (!bundles || bundles.length === 0) return;
-                const grid = document.querySelector('.grid.grid-cols-1.sm\\:grid-cols-2.lg\\:grid-cols-3');
-                if (!grid) return;
-                // Find the promo block to insert before it
-                const promo = grid.querySelector('[class*="col-span"]');
-                bundles.forEach(b => {
-                    const perPiece = b.quantity > 0 ? Math.round(b.price / b.quantity) : 0;
-                    const photo = b.photos && b.photos[0] ? b.photos[0] : 'https://placehold.co/400x500/f5f5f5/999?text=No+Image';
-                    const supplier = b.sellers ? b.sellers.business_name : '';
-                    const card = document.createElement('article');
-                    card.className = 'bundle-card flex flex-col gap-stack-sm bg-surface rounded-xl overflow-hidden border border-outline-variant transition-shadow cursor-pointer relative group';
-                    card.onclick = () => { window.location.href = link('bundleinfo.html') + '?id=' + b.id; };
-                    card.innerHTML =
-                        '<div class="relative aspect-[4/5] bg-surface-container-low overflow-hidden">' +
-                        '<img alt="' + b.name + '" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="' + photo + '">' +
-                        (b.grade ? '<div class="absolute top-3 left-3 bg-accent text-on-accent px-2.5 py-1 rounded-full text-xs font-label-caps tracking-wider">' + b.grade + '</div>' : '') +
-                        '<button class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface/80 backdrop-blur flex items-center justify-center text-primary hover:bg-surface transition-colors">' +
-                        '<span class="material-symbols-outlined text-[18px]">favorite</span></button></div>' +
-                        '<div class="p-stack-md flex flex-col gap-1">' +
-                        '<div class="flex justify-between items-start">' +
-                        '<h4 class="font-title-md text-title-md text-primary truncate pr-2">' + b.name + '</h4></div>' +
-                        '<p class="font-body-sm text-body-sm text-secondary">' + supplier + '</p>' +
-                        '<div class="mt-2 flex items-baseline gap-2">' +
-                        '<span class="font-headline-lg-mobile text-headline-lg-mobile text-primary">₩' + b.price.toLocaleString('ko-KR') + '</span></div>' +
-                        '<span class="text-xs text-secondary mt-1">개당 ₩' + perPiece.toLocaleString('ko-KR') + ' · ' + b.quantity + '개</span></div>';
-                    if (promo) grid.insertBefore(card, promo);
-                    else grid.appendChild(card);
-                    // Setup fav button
-                    const favBtn = card.querySelector('button');
-                    if (favBtn) setupFavBtn(favBtn, b.id);
-                });
+
+                // Latest Drops carousel
+                const latestTrack = document.getElementById('latestDropsTrack');
+                if (latestTrack) {
+                    bundles.slice(0, 10).forEach(b => {
+                        const card = createBundleCard(b);
+                        card.style.cssText = 'flex:0 0 280px;min-width:280px';
+                        latestTrack.appendChild(card);
+                    });
+                }
+
+                // Product grid
+                const grid = document.getElementById('productGrid');
+                if (grid) {
+                    const promo = grid.querySelector('[class*="col-span"]');
+                    bundles.forEach(b => {
+                        const card = createBundleCard(b);
+                        if (promo) grid.insertBefore(card, promo);
+                        else grid.appendChild(card);
+                    });
+                }
             }).catch(e => console.log('Bundle fetch:', e));
         }
 
