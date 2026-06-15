@@ -101,13 +101,22 @@
             try {
                 await DB.signIn(email, password);
                 const user = await DB.getUser();
-                const seller = await DB.getSellerProfile(user.id);
+                let seller = await DB.getSellerProfile(user.id);
                 if (!seller) {
-                    alert('판매자 계정이 아닙니다. 판매자로 가입해주세요.');
-                    await DB.signOut();
-                    btn.disabled = false;
-                    btn.textContent = '로그인';
-                    return;
+                    // 기존 유저 → 판매자 프로필 자동 생성
+                    const name = user.user_metadata?.display_name || user.user_metadata?.business_name || email.split('@')[0];
+                    const { error } = await db.from('sellers').insert({
+                        id: user.id,
+                        business_name: name,
+                        contact_name: name,
+                        country: '한국'
+                    });
+                    if (error) {
+                        alert('판매자 프로필 생성 실패: ' + error.message);
+                        btn.disabled = false;
+                        btn.textContent = '로그인';
+                        return;
+                    }
                 }
                 window.location.href = 'index.html';
             } catch (err) {
