@@ -408,8 +408,10 @@
 
                 // Update main image
                 const mainImg = document.querySelector('[class*="aspect-"][class*="4"] img');
-                if (mainImg && b.photos && b.photos[0]) {
-                    mainImg.src = b.photos[0];
+                if (mainImg) {
+                    mainImg.alt = b.name;
+                    mainImg.onerror = () => { mainImg.src = 'https://placehold.co/800x600/f5f5f5/999?text=No+Image'; };
+                    if (b.photos && b.photos[0]) mainImg.src = b.photos[0];
                 }
 
                 // Update thumbnail strip with real photos
