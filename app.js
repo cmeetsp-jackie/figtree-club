@@ -500,6 +500,75 @@
             if (favBtn) setupFavBtn(favBtn, p.id);
         });
 
+        // Load real seller data if ?id= present
+        const sellerId = new URLSearchParams(location.search).get('id');
+        if (sellerId && typeof DB !== 'undefined') {
+            (async () => {
+                try {
+                    const seller = await DB.getSellerProfile(sellerId);
+                    if (!seller) return;
+
+                    // Update profile header
+                    const nameEl = document.querySelector('h1');
+                    if (nameEl) nameEl.textContent = seller.business_name;
+
+                    const descEl = document.querySelector('h1')?.closest('section')?.querySelector('p');
+                    if (descEl) descEl.textContent = seller.description || '등록된 소개가 없습니다.';
+
+                    // Avatar
+                    const avatarImg = document.querySelector('[class*="rounded-full"] img');
+                    if (avatarImg && seller.avatar_url) {
+                        avatarImg.src = seller.avatar_url;
+                    } else if (avatarImg && !seller.avatar_url) {
+                        const initials = seller.business_name.split(' ').map(w => w[0]).join('').slice(0, 2);
+                        avatarImg.parentElement.innerHTML = '<span class="text-4xl font-bold">' + initials + '</span>';
+                    }
+
+                    // Stats
+                    const statEls = document.querySelectorAll('[class*="font-title-md"][class*="text-primary"]');
+                    statEls.forEach(el => {
+                        const label = el.closest('.flex.flex-col')?.querySelector('[class*="label-caps"]')?.textContent || '';
+                        if (label.includes('평점')) el.textContent = seller.rating > 0 ? seller.rating : '-';
+                        if (label.includes('응답')) el.textContent = seller.response_time || '-';
+                        if (label.includes('위치')) el.textContent = seller.country || '-';
+                    });
+                    const ratingCount = document.querySelector('.font-body-sm.text-body-sm.text-secondary');
+                    if (ratingCount && ratingCount.textContent.includes('(')) ratingCount.textContent = '(' + (seller.review_count || 0) + ')';
+
+                    // Load seller's bundles
+                    const bundles = await DB.getSellerBundles(sellerId);
+                    if (bundles.length > 0) {
+                        const grid = document.querySelector('.grid.grid-cols-1.sm\\:grid-cols-2');
+                        if (grid) {
+                            grid.innerHTML = '';
+                            bundles.forEach(b => {
+                                const photo = b.photos && b.photos[0] ? b.photos[0] : 'https://placehold.co/400x500/f5f5f5/999?text=No+Image';
+                                const perPiece = b.quantity > 0 ? Math.round(b.price / b.quantity) : 0;
+                                const card = document.createElement('article');
+                                card.className = 'bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden cursor-pointer group flex flex-col';
+                                card.style.cssText = 'transition:transform .2s,box-shadow .2s';
+                                card.onmouseenter = () => { card.style.transform = 'translateY(-3px)'; card.style.boxShadow = '0 8px 24px rgba(0,0,0,.1)'; };
+                                card.onmouseleave = () => { card.style.transform = ''; card.style.boxShadow = ''; };
+                                card.onclick = () => location.href = link('bundleinfo.html') + '?id=' + b.id;
+                                card.innerHTML =
+                                    '<div class="relative aspect-[4/5] bg-surface-variant overflow-hidden">' +
+                                    '<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="' + photo + '" alt="' + b.name + '">' +
+                                    (b.grade ? '<div class="absolute top-3 left-3 bg-primary text-on-primary px-2.5 py-1 rounded-full text-xs font-semibold">' + b.grade + '</div>' : '') +
+                                    '</div>' +
+                                    '<div class="p-4 flex flex-col flex-1 gap-2">' +
+                                    '<h3 class="font-semibold text-primary">' + b.name + '</h3>' +
+                                    '<div class="flex items-end justify-between mt-auto">' +
+                                    '<div><span class="text-xl font-bold text-primary">₩' + b.price.toLocaleString('ko-KR') + '</span>' +
+                                    '<span class="text-sm text-secondary ml-1">/ ' + b.quantity + '개</span></div>' +
+                                    '<span class="text-sm text-secondary">개당 ₩' + perPiece.toLocaleString('ko-KR') + '</span></div></div>';
+                                grid.appendChild(card);
+                            });
+                        }
+                    }
+                } catch (e) { console.error('Supplier load error:', e); }
+            })();
+        }
+
         // Sort
         const sortSelect = document.querySelector('select');
         if (sortSelect) {
