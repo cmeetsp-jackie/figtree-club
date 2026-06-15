@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>도매 번들 상세 - FLEEK</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Manrope:wght@600;700;900&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#ffdad6",
+                        "surface-container-highest": "#e5e2e1",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "tertiary-fixed-dim": "#c6c6c7",
+                        "surface-variant": "#e5e2e1",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed": "#e2e2e2",
+                        "inverse-surface": "#313030",
+                        "surface-container-lowest": "#ffffff",
+                        "error": "#ba1a1a",
+                        "surface-dim": "#dcd9d9",
+                        "on-tertiary-fixed-variant": "#454747",
+                        "primary": "#000000",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed": "#e2e2e2",
+                        "on-tertiary": "#ffffff",
+                        "tertiary": "#000000",
+                        "surface-container-high": "#eae7e7",
+                        "on-primary": "#ffffff",
+                        "secondary-fixed-dim": "#c7c6c6",
+                        "secondary-fixed": "#e4e2e2",
+                        "surface-container-low": "#f6f3f2",
+                        "outline-variant": "#cfc4c5",
+                        "tertiary-container": "#1a1c1c",
+                        "background": "#fcf9f8",
+                        "inverse-primary": "#c6c6c6",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "on-surface": "#1c1b1b",
+                        "on-secondary-container": "#626262",
+                        "primary-container": "#1b1b1b",
+                        "on-secondary-fixed-variant": "#464747",
+                        "on-surface-variant": "#4c4546",
+                        "on-background": "#1c1b1b",
+                        "on-tertiary-container": "#838484",
+                        "secondary": "#5e5e5e",
+                        "surface": "#fcf9f8",
+                        "on-primary-fixed": "#1b1b1b",
+                        "on-primary-fixed-variant": "#474747",
+                        "outline": "#7e7576",
+                        "surface-tint": "#5e5e5e",
+                        "surface-bright": "#fcf9f8",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "secondary-container": "#e1dfdf",
+                        "on-primary-container": "#848484",
+                        "surface-container": "#f0eded",
+                        "inverse-on-surface": "#f3f0ef"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "container-max": "1440px",
+                        "stack-sm": "8px",
+                        "stack-md": "16px",
+                        "margin-mobile": "20px",
+                        "margin-desktop": "64px",
+                        "gutter": "24px",
+                        "stack-lg": "32px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": [
+                            "Manrope"
+                        ],
+                        "body-sm": [
+                            "Inter"
+                        ],
+                        "display-lg": [
+                            "Manrope"
+                        ],
+                        "title-md": [
+                            "Manrope"
+                        ],
+                        "headline-lg-mobile": [
+                            "Manrope"
+                        ],
+                        "body-lg": [
+                            "Inter"
+                        ],
+                        "label-caps": [
+                            "Inter"
+                        ]
+                    },
+                    "fontSize": {
+                        "headline-lg": [
+                            "32px",
+                            {
+                                "lineHeight": "40px",
+                                "fontWeight": "600"
+                            }
+                        ],
+                        "body-sm": [
+                            "14px",
+                            {
+                                "lineHeight": "20px",
+                                "fontWeight": "400"
+                            }
+                        ],
+                        "display-lg": [
+                            "48px",
+                            {
+                                "lineHeight": "56px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "700"
+                            }
+                        ],
+                        "title-md": [
+                            "20px",
+                            {
+                                "lineHeight": "28px",
+                                "fontWeight": "600"
+                            }
+                        ],
+                        "headline-lg-mobile": [
+                            "24px",
+                            {
+                                "lineHeight": "32px",
+                                "fontWeight": "600"
+                            }
+                        ],
+                        "body-lg": [
+                            "16px",
+                            {
+                                "lineHeight": "24px",
+                                "fontWeight": "400"
+                            }
+                        ],
+                        "label-caps": [
+                            "12px",
+                            {
+                                "lineHeight": "16px",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "600"
+                            }
+                        ]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .ambient-shadow:hover {
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.12);
+        }
+    </style>
+</head>
+
+<body class="antialiased min-h-screen flex flex-col">
+    <!-- Top Banner -->
+    <div class="w-full bg-primary text-on-primary text-center py-3 text-sm font-semibold tracking-wide" style="animation:fadeIn .5s ease">
+        리셀러들이 최고의 재고를 소싱하는 곳 &mdash; <a href="signup.html" class="underline hover:opacity-80 transition-opacity">지금 가입하고 시작하기 &rarr;</a>
+    </div>
+    <!-- TopAppBar -->
+    <header
+        class="bg-surface dark:bg-surface-container-lowest text-primary dark:text-on-surface border-b border-outline-variant dark:border-outline w-full top-0 z-50">
+        <div
+            class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop h-20 max-w-container-max mx-auto">
+            <!-- Brand -->
+            <a class="text-headline-lg-mobile md:text-headline-lg font-headline-lg-mobile md:font-headline-lg font-black tracking-tighter text-primary dark:text-on-surface flex items-center gap-2"
+                href="#"><span class="material-symbols-outlined text-[32px]"
+                    style="font-variation-settings: 'FILL' 1;">star</span> Figtree Club</a>
+            <!-- Navigation Links (Desktop) -->
+            <nav class="hidden md:flex items-center gap-gutter h-full">
+                <a class="h-full flex items-center text-secondary dark:text-on-secondary-container hover:text-primary dark:hover:text-on-surface transition-colors duration-200 font-title-md text-title-md"
+                    href="#">카테고리</a>
+                <a class="h-full flex items-center text-secondary dark:text-on-secondary-container hover:text-primary dark:hover:text-on-surface transition-colors duration-200 font-title-md text-title-md"
+                    href="#">브랜드</a>
+                <a class="h-full flex items-center text-secondary dark:text-on-secondary-container hover:text-primary dark:hover:text-on-surface transition-colors duration-200 font-title-md text-title-md"
+                    href="#">공급업체</a>
+            </nav>
+            <!-- Search Bar (Desktop) -->
+            <div class="hidden md:flex flex-1 max-w-md mx-gutter">
+                <div class="relative w-full">
+                    <span
+                        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+                    <input
+                        class="w-full pl-10 pr-4 py-2 border border-outline-variant bg-surface focus:border-primary focus:ring-1 focus:ring-primary rounded-DEFAULT font-body-sm text-body-sm text-on-surface transition-all placeholder:text-on-surface-variant/50"
+                        placeholder="도매 번들 검색..." type="text" />
+                </div>
+            </div>
+            <!-- Trailing Actions -->
+            <div class="flex items-center gap-stack-md">
+                <button class="text-primary hover:opacity-70 transition-opacity">
+                    <span class="material-symbols-outlined">shopping_cart</span>
+                </button>
+                <button class="text-primary hover:opacity-70 transition-opacity hidden md:block">
+                    <span class="material-symbols-outlined">account_circle</span>
+                </button>
+                <button
+                    class="hidden md:block px-6 py-2 border border-primary text-primary font-title-md text-title-md rounded-DEFAULT hover:bg-surface-container-low transition-colors">로그인</button>
+                <button
+                    class="px-6 py-2 bg-primary text-on-primary font-title-md text-title-md rounded-DEFAULT hover:bg-primary/90 transition-colors">가입하기</button>
+            </div>
+        </div>
+    </header>
+    <!-- Main Content Canvas -->
+    <main
+        class="flex-1 w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-stack-lg flex flex-col gap-stack-lg">
+        <!-- Breadcrumbs -->
+        <nav class="flex items-center gap-2 text-body-sm font-body-sm text-secondary">
+            <a class="hover:text-primary hover:underline" href="#">홈</a>
+            <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+            <a class="hover:text-primary hover:underline" href="#">카테고리</a>
+            <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+            <a class="hover:text-primary hover:underline" href="#">빈티지 아우터</a>
+            <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+            <span class="text-primary font-medium">프리미엄 빈티지 가죽 자켓 번들</span>
+        </nav>
+        <!-- Product Hero Section -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
+            <!-- Gallery (Left, 7 columns) -->
+            <div class="lg:col-span-7 flex flex-col gap-stack-sm">
+                <!-- Main Image -->
+                <div
+                    class="w-full aspect-[4/3] bg-surface-container-low border border-outline-variant rounded-lg overflow-hidden relative group cursor-zoom-in">
+                    <img alt="A high-quality, perfectly lit photograph of multiple vintage leather jackets arranged neatly on a clean white surface. The leather shows natural patinas in black, brown, and tan. The lighting is soft and studio-quality, highlighting the textures of the leather and hardware. The overall aesthetic is premium, minimalist, and editorial, suitable for a high-end wholesale catalog."
+                        class="w-full h-full object-cover"
+                        data-alt="A high-quality, perfectly lit photograph of multiple vintage leather jackets arranged neatly on a clean white surface. The leather shows natural patinas in black, brown, and tan. The lighting is soft and studio-quality, highlighting the textures of the leather and hardware. The overall aesthetic is premium, minimalist, and editorial, suitable for a high-end wholesale catalog."
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKCJVeloQzvLYfrm_jvNwj5Lpu0sWMBIDgEI7o2938mzSSFS3MY1bnvAVgR9hMGoQxvg0V-cxchdwt5b42AjJkBTHlAqZh0ASZTvBT4j1gqeRtY77_sdIXINVJn4feKRvRETMgACNXTHNYiEHMnZiVDSEDy3T7NtRKIz_As35AEffILGz_-AxKwikT5HCeo73sOMZE-g2mxuAPdWk4TYLRndz6uB1eQrTIBGt9yKJiby8Y3qjDFx8OroYtyX3XgRultO0-JzyJERHH" />
+                    <!-- Bundle Tags -->
+                    <div class="absolute top-4 left-4 flex flex-col gap-2">
+                        <span
+                            class="bg-primary text-on-primary px-3 py-1 font-label-caps text-label-caps rounded-DEFAULT uppercase tracking-wider">프리미엄
+                            A급</span>
+                        <span
+                            class="bg-surface text-primary border border-outline-variant px-3 py-1 font-label-caps text-label-caps rounded-DEFAULT uppercase tracking-wider">10벌</span>
+                    </div>
+                    <!-- Expand Icon -->
+                    <div
+                        class="absolute bottom-4 right-4 bg-surface/80 backdrop-blur-sm p-2 rounded-full border border-outline-variant opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span class="material-symbols-outlined text-primary">fullscreen</span>
+                    </div>
+                </div>
+                <!-- Thumbnail Strip -->
+                <div class="grid grid-cols-5 gap-stack-sm">
+                    <div
+                        class="aspect-square bg-surface-container border-2 border-primary rounded-lg overflow-hidden cursor-pointer opacity-100">
+                        <img alt="Thumbnail 1" class="w-full h-full object-cover"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpCDFmvlu3Oyi60UHp1sefzHTVhTe3jz0Pg0ucobLK2BrS2A6YnQGEdMhJF9pFDu7IYi7iBzd0zIifRZIJNA-kR3sqmBZgLPsbWrgytg7JWZ7o4JhNHbCiUhvaBAE5BYfEhy_PetPrPHRwIxAoSPA7LFts_9t5-e-Ix434HNrmP5jlH5RvqaWTLml6hIkERI0Te4LcdwB_HGk1ckYj1iO8xkKQXG3VHx8lsAMv2_vt01LKTs081YYqQEMbCJ-UGv2J1gTXek4c4non" />
+                    </div>
+                    <div
+                        class="aspect-square bg-surface-container border border-outline-variant rounded-lg overflow-hidden cursor-pointer opacity-70 hover:opacity-100 transition-opacity">
+                        <img alt="Thumbnail 2" class="w-full h-full object-cover"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAB9a8RY1RSW4Dk5jtLlRw4P5bx1_NP2_7HlIejOE9GRETLRgONio8ze8zQPL3DDgYpLgXNqN6bkHe6U6JgTPT8C40eanKjPsjb_nvVqdN5wJd4rX_xQT7pWtG_dPYNd3JvbqJ9hNThUJE1Pvay7YLdYHtkxcc4shs1fVqjgxVBQfIQ2AOdQuFviNdZpg3IDTIdJMIPc9QjDO4Qs3kUVQ_H2TQNXFjJeAyEHdYJVySNz24TM1xGKGDJLsqQaRax5VMQXVuGj2KD7QyU" />
+                    </div>
+                    <div
+                        class="aspect-square bg-surface-container border border-outline-variant rounded-lg overflow-hidden cursor-pointer opacity-70 hover:opacity-100 transition-opacity">
+                        <img alt="Thumbnail 3" class="w-full h-full object-cover"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbxyMKLWn4Q13IHJUmEH2WMFTzO1VQgt84KKeS0Le8kVDAmvalr2JB-2FSw5JeMjosNpjx2K_yGNfKTzrhfnPZPgKFq14jUneeYqOd7qzgWYyfAmKmO7YRMhKH-brBbONka1KDcDSGVKGphCoZBx8UWpIzV8k23rSGhq8iOYJYyvA8fleAxwUBiFb7ehyfoWSymMKn5bZ-QR8qBm9Segsy8y2IhrdrOR_xHfcFE07HdIwMJ1tCuV20K8CsHoyNc21Y1zrm-GeA-0Yc" />
+                    </div>
+                    <div
+                        class="aspect-square bg-surface-container border border-outline-variant rounded-lg overflow-hidden cursor-pointer opacity-70 hover:opacity-100 transition-opacity">
+                        <img alt="Thumbnail 4" class="w-full h-full object-cover"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_O4WU88qyQSiyZVig83SBwAZy3DwwYLJbzO5VO2FRPWKM1uY5hRT7kK07WUN6aBP8UB6cJypZJe_DqaVWmRxZscFpVFAERnjv4cU2RuR62NnRklDKvi3J-aeG7xFeysqMJ-HogGh4d6wnurAvwyI59I1ksjfBL7LEr8owy_EAnE5zacM17t11E036TKMCm227EfbV-cu7Yr85fxEAE5y_E9uHvPtK0o8s3H8jcjHNYoUyyVZFCmL6byd10JUacJlfD6N9CTe9eLiN" />
+                    </div>
+                    <div
+                        class="aspect-square bg-surface-container border border-outline-variant rounded-lg overflow-hidden flex items-center justify-center cursor-pointer hover:bg-surface-container-high transition-colors text-body-sm font-body-sm text-secondary">
+                        +6개 더보기
+                    </div>
+                </div>
+            </div>
+            <!-- Details & Actions (Right, 5 columns) -->
+            <div class="lg:col-span-5 flex flex-col gap-stack-lg sticky top-24">
+                <!-- Header Info -->
+                <div class="flex flex-col gap-stack-sm border-b border-outline-variant pb-stack-md">
+                    <div class="flex justify-between items-start">
+                        <h1 class="font-display-lg text-headline-lg md:text-display-lg text-primary leading-tight">프리미엄
+                            빈티지 가죽 자켓</h1>
+                        <button class="text-secondary hover:text-primary transition-colors mt-2">
+                            <span class="material-symbols-outlined text-[28px]">favorite_border</span>
+                        </button>
+                    </div>
+                    <div class="flex items-center gap-4 text-body-sm font-body-sm text-secondary mt-2">
+                        <span class="flex items-center gap-1"><span
+                                class="material-symbols-outlined text-[18px]">inventory_2</span> 번들 ID: VJ-8492</span>
+                        <span class="text-outline-variant">|</span>
+                        <span class="flex items-center gap-1"><span
+                                class="material-symbols-outlined text-[18px]">category</span> 아우터</span>
+                    </div>
+                    <div class="mt-4 flex items-baseline gap-3">
+                        <span class="font-headline-lg text-display-lg text-primary">₩765,000</span>
+                        <span class="font-body-lg text-body-lg text-secondary">벌당 ₩76,500</span>
+                    </div>
+                </div>
+                <!-- Supplier Snippet -->
+                <div
+                    class="flex items-center justify-between p-4 border border-outline-variant rounded-lg bg-surface-container-lowest">
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="w-12 h-12 rounded-full bg-surface-container overflow-hidden border border-outline-variant">
+                            <img alt="Supplier Avatar" class="w-full h-full object-cover"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnpZhwtXBJDAHqi9dIrmphROCwc5673qLc-j1MSNVMNabkXFbjrXDyqGub-DiNRr0aDgj1dTQJGv8TbflyUMvkz73d1xviVdkL9GTM9uRwJxUKUgVI8LjifhgpbcEePOIwkldTFISTSHE_c5lVCTY5pzyzrn2SiWXqcxyCgDIQ-AAKBfQrYKAyV1DXnuXu-8fi808TvgCkZahvN8oPBQXeqvbm26fsGhLCWrbAb0CwXy-bM_BgpmF8RAsYjNYUQea4Y-0UmU64fxNQ" />
+                        </div>
+                        <div>
+                            <h3 class="font-title-md text-body-lg text-primary flex items-center gap-1">
+                                레트로 도매 UK
+                                <span class="material-symbols-outlined text-primary text-[16px]"
+                                    style="font-variation-settings: 'FILL' 1;">verified</span>
+                            </h3>
+                            <div class="flex items-center gap-2 mt-1">
+                                <span class="flex items-center text-primary font-label-caps text-label-caps"><span
+                                        class="material-symbols-outlined text-[14px] text-primary"
+                                        style="font-variation-settings: 'FILL' 1;">star</span> 4.9</span>
+                                <span class="text-outline-variant text-[10px]">•</span>
+                                <span class="text-secondary font-label-caps text-label-caps">평균 응답: 2시간</span>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="text-primary font-body-sm text-body-sm underline hover:opacity-70" href="#">프로필 보기</a>
+                </div>
+                <!-- Key Metrics Grid -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="p-4 border border-outline-variant rounded-lg bg-surface">
+                        <span
+                            class="block font-label-caps text-label-caps text-secondary uppercase tracking-wider mb-1">상태</span>
+                        <span class="font-title-md text-body-lg text-primary">A급 (우수)</span>
+                    </div>
+                    <div class="p-4 border border-outline-variant rounded-lg bg-surface">
+                        <span
+                            class="block font-label-caps text-label-caps text-secondary uppercase tracking-wider mb-1">사이즈</span>
+                        <span class="font-title-md text-body-lg text-primary">혼합 (M - XL)</span>
+                    </div>
+                    <div class="p-4 border border-outline-variant rounded-lg bg-surface">
+                        <span
+                            class="block font-label-caps text-label-caps text-secondary uppercase tracking-wider mb-1">배송</span>
+                        <span class="font-title-md text-body-lg text-primary">24시간 내 발송</span>
+                    </div>
+                    <div class="p-4 border border-outline-variant rounded-lg bg-surface">
+                        <span
+                            class="block font-label-caps text-label-caps text-secondary uppercase tracking-wider mb-1">위치</span>
+                        <span class="font-title-md text-body-lg text-primary">런던, 영국</span>
+                    </div>
+                </div>
+                <!-- Actions -->
+                <div class="flex flex-col gap-3 mt-4">
+                    <button
+                        class="w-full py-4 bg-primary text-on-primary font-title-md text-title-md rounded-DEFAULT hover:bg-primary/90 transition-colors flex justify-center items-center gap-2">
+                        <span class="material-symbols-outlined">lock</span>
+                        지금 구매 - ₩765,000
+                    </button>
+                    <button
+                        class="w-full py-4 border border-primary text-primary font-title-md text-title-md rounded-DEFAULT hover:bg-surface-container-low transition-colors">
+                        가격 제안하기
+                    </button>
+                    <p
+                        class="text-center font-body-sm text-body-sm text-secondary mt-2 flex items-center justify-center gap-1">
+                        <span class="material-symbols-outlined text-[16px]">verified_user</span> Figtree Pay를 통한 안전한 거래
+                    </p>
+                </div>
+            </div>
+        </section>
+        <!-- Detailed Breakdown Tabs (Bento Style Layout below fold) -->
+        <section
+            class="mt-stack-lg border-t border-outline-variant pt-stack-lg grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+            <!-- Left Column: Description & Grading (Span 2) -->
+            <div class="lg:col-span-2 flex flex-col gap-stack-lg">
+                <div class="bg-surface p-stack-md md:p-stack-lg border border-outline-variant rounded-lg">
+                    <h2 class="font-headline-lg text-headline-lg text-primary mb-4">번들 설명</h2>
+                    <div class="prose prose-sm max-w-none font-body-lg text-body-lg text-on-surface-variant space-y-4">
+                        <p>주로 80년대와 90년대 유럽 시장에서 소싱된 세심하게 큐레이션된 빈티지 가죽 자켓 셀렉션입니다. 이 번들에는 봄버 자켓, 모터사이클 스타일, 클래식 테일러드 컷이
+                            혼합되어 있습니다.</p>
+                        <p>모든 품목은 전문적인 클리닝 및 컨디셔닝을 거쳤습니다. 하드웨어(지퍼, 스냅)를 확인했으며 90% 이상의 품목에서 완벽하게 작동합니다. 빈티지한 매력을 더하는 약간의
+                            자연스러운 마모와 파티나가 있을 수 있습니다.</p>
+                        <ul class="list-disc pl-5 mt-4 space-y-2">
+                            <li>포함된 브랜드: 언브랜드 빈티지, 일부 중급 헤리티지 브랜드.</li>
+                            <li>색상: 주로 블랙과 다크 브라운이며, 간혹 탠 또는 옥스블러드 색상이 있습니다.</li>
+                            <li>소재: 100% 천연 가죽(소가죽, 양가죽).</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Grading Breakdown -->
+                <div class="bg-surface p-stack-md md:p-stack-lg border border-outline-variant rounded-lg">
+                    <h2 class="font-headline-lg text-headline-lg text-primary mb-4 flex items-center gap-2">
+                        <span class="material-symbols-outlined">fact_check</span>
+                        상태 및 등급 내역
+                    </h2>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-3 bg-surface-container-low rounded">
+                            <div class="flex items-center gap-3">
+                                <span class="w-3 h-3 rounded-full bg-primary"></span>
+                                <span class="font-title-md text-body-lg text-primary">A급 (우수)</span>
+                            </div>
+                            <span class="font-body-lg text-body-lg text-secondary">8벌 (80%)</span>
+                        </div>
+                        <p class="text-body-sm font-body-sm text-secondary pl-6">약간의 사용감, 전반적으로 우수한 상태, 완벽하게 작동하는 하드웨어,
+                            특이한 냄새 없음.</p>
+                        <div class="flex items-center justify-between p-3 bg-surface-container-low rounded mt-2">
+                            <div class="flex items-center gap-3">
+                                <span class="w-3 h-3 rounded-full bg-outline"></span>
+                                <span class="font-title-md text-body-lg text-primary">B급 (양호/보통)</span>
+                            </div>
+                            <span class="font-body-lg text-body-lg text-secondary">2벌 (20%)</span>
+                        </div>
+                        <p class="text-body-sm font-body-sm text-secondary pl-6">눈에 띄는 파티나, 약간의 흠집, 작은 스냅이 누락되었거나 약간의 가죽
+                            컨디셔닝이 필요할 수 있습니다. 판매 가치가 매우 높습니다.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Right Column: Shipping & Policies -->
+            <div class="flex flex-col gap-stack-lg">
+                <!-- Shipping Box -->
+                <div class="bg-surface-container-low p-stack-md border border-outline-variant rounded-lg">
+                    <h3 class="font-title-md text-title-md text-primary mb-4 flex items-center gap-2">
+                        <span class="material-symbols-outlined">local_shipping</span>
+                        배송 및 물류
+                    </h3>
+                    <ul class="space-y-4">
+                        <li class="flex justify-between items-start border-b border-outline-variant pb-3">
+                            <span class="font-body-sm text-body-sm text-secondary">배송 수단</span>
+                            <span class="font-body-sm text-body-sm text-primary text-right">DPD 익일 배송 (영국)<br />DHL
+                                익스프레스 (해외)</span>
+                        </li>
+                        <li class="flex justify-between items-center border-b border-outline-variant pb-3">
+                            <span class="font-body-sm text-body-sm text-secondary">예상 비용 (영국)</span>
+                            <span class="font-body-sm text-body-sm text-primary">₩25,000</span>
+                        </li>
+                        <li class="flex justify-between items-center border-b border-outline-variant pb-3">
+                            <span class="font-body-sm text-body-sm text-secondary">발송 시간</span>
+                            <span class="font-body-sm text-body-sm text-primary">24시간 이내</span>
+                        </li>
+                        <li class="flex justify-between items-center">
+                            <span class="font-body-sm text-body-sm text-secondary">무게 (예상)</span>
+                            <span class="font-body-sm text-body-sm text-primary">12 kg</span>
+                        </li>
+                    </ul>
+                </div>
+                <!-- Supplier Guarantee -->
+                <div class="bg-surface p-stack-md border border-outline-variant rounded-lg">
+                    <h3 class="font-title-md text-title-md text-primary mb-3">공급업체 보증</h3>
+                    <p class="font-body-sm text-body-sm text-secondary mb-4">이 공급업체는 번들이 설명된 등급과 크게 다를 경우 7일 이내에 반품을
+                        수락합니다.</p>
+                    <a class="font-label-caps text-label-caps text-primary uppercase tracking-wider underline hover:opacity-70"
+                        href="#">반품 정책 읽기</a>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- Footer -->
+    <footer
+        class="bg-surface-container-lowest dark:bg-inverse-surface border-t border-outline-variant dark:border-outline mt-auto">
+        <div
+            class="w-full py-stack-lg px-margin-mobile md:px-margin-desktop flex flex-col md:flex-row justify-between items-center max-w-container-max mx-auto gap-stack-md">
+            <!-- Brand Logo -->
+            <div class="font-headline-lg text-headline-lg text-primary flex items-center gap-2"><span
+                    class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                Figtree Club</div>
+            <!-- Links -->
+            <nav class="flex flex-wrap justify-center gap-gutter">
+                <a class="font-body-sm text-body-sm font-label-caps text-label-caps text-secondary dark:text-on-surface-variant hover:text-primary dark:hover:text-on-surface transition-colors"
+                    href="#">서비스 약관</a>
+                <a class="font-body-sm text-body-sm font-label-caps text-label-caps text-secondary dark:text-on-surface-variant hover:text-primary dark:hover:text-on-surface transition-colors"
+                    href="#">개인정보 처리방침</a>
+                <a class="font-body-sm text-body-sm font-label-caps text-label-caps text-secondary dark:text-on-surface-variant hover:text-primary dark:hover:text-on-surface transition-colors"
+                    href="#">공급업체 가이드라인</a>
+                <a class="font-body-sm text-body-sm font-label-caps text-label-caps text-secondary dark:text-on-surface-variant hover:text-primary dark:hover:text-on-surface transition-colors"
+                    href="#">고객 센터</a>
+                <a class="font-body-sm text-body-sm font-label-caps text-label-caps text-secondary dark:text-on-surface-variant hover:text-primary dark:hover:text-on-surface transition-colors"
+                    href="#">배송 파트너</a>
+            </nav>
+            <!-- Copyright -->
+            <div
+                class="font-body-sm text-body-sm font-label-caps text-label-caps text-secondary dark:text-on-surface-variant text-center md:text-right">
+                © 2024 Figtree Club 도매 리셀러 마켓플레이스. 모든 권리 보유.</div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script src="auth.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>

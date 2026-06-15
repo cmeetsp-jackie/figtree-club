@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>공급업체 프로필 - Figtree Club</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Manrope:wght@600;700;900&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#ffdad6",
+                        "surface-container-highest": "#e5e2e1",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "tertiary-fixed-dim": "#c6c6c7",
+                        "surface-variant": "#e5e2e1",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed": "#e2e2e2",
+                        "inverse-surface": "#313030",
+                        "surface-container-lowest": "#ffffff",
+                        "error": "#ba1a1a",
+                        "surface-dim": "#dcd9d9",
+                        "on-tertiary-fixed-variant": "#454747",
+                        "primary": "#000000",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed": "#e2e2e2",
+                        "on-tertiary": "#ffffff",
+                        "tertiary": "#000000",
+                        "surface-container-high": "#eae7e7",
+                        "on-primary": "#ffffff",
+                        "secondary-fixed-dim": "#c7c6c6",
+                        "secondary-fixed": "#e4e2e2",
+                        "surface-container-low": "#f6f3f2",
+                        "outline-variant": "#cfc4c5",
+                        "tertiary-container": "#1a1c1c",
+                        "background": "#fcf9f8",
+                        "inverse-primary": "#c6c6c6",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "on-surface": "#1c1b1b",
+                        "on-secondary-container": "#626262",
+                        "primary-container": "#1b1b1b",
+                        "on-secondary-fixed-variant": "#464747",
+                        "on-surface-variant": "#4c4546",
+                        "on-background": "#1c1b1b",
+                        "on-tertiary-container": "#838484",
+                        "secondary": "#5e5e5e",
+                        "surface": "#fcf9f8",
+                        "on-primary-fixed": "#1b1b1b",
+                        "on-primary-fixed-variant": "#474747",
+                        "outline": "#7e7576",
+                        "surface-tint": "#5e5e5e",
+                        "surface-bright": "#fcf9f8",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "secondary-container": "#e1dfdf",
+                        "on-primary-container": "#848484",
+                        "surface-container": "#f0eded",
+                        "inverse-on-surface": "#f3f0ef"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "container-max": "1440px",
+                        "stack-sm": "8px",
+                        "stack-md": "16px",
+                        "margin-mobile": "20px",
+                        "margin-desktop": "64px",
+                        "gutter": "24px",
+                        "stack-lg": "32px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Manrope"],
+                        "body-sm": ["Inter"],
+                        "display-lg": ["Manrope"],
+                        "title-md": ["Manrope"],
+                        "headline-lg-mobile": ["Manrope"],
+                        "body-lg": ["Inter"],
+                        "label-caps": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "title-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+
+        /* Subtle ambient shadow for hover states */
+        .hover-ambient-shadow:hover {
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background text-on-background font-body-sm antialiased selection:bg-primary selection:text-on-primary min-h-screen flex flex-col">
+    <!-- Top Banner -->
+    <div class="w-full bg-primary text-on-primary text-center py-3 text-sm font-semibold tracking-wide" style="animation:fadeIn .5s ease">
+        리셀러들이 최고의 재고를 소싱하는 곳 &mdash; <a href="signup.html" class="underline hover:opacity-80 transition-opacity">지금 가입하고 시작하기 &rarr;</a>
+    </div>
+    <!-- TopAppBar -->
+    <header
+        class="bg-surface dark:bg-surface-container-lowest docked full-width top-0 border-b border-outline-variant dark:border-outline flat no shadows sticky z-50">
+        <div
+            class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop h-20 max-w-container-max mx-auto">
+            <!-- Logo & Nav -->
+            <div class="flex items-center gap-gutter">
+                <a class="text-headline-lg font-headline-lg font-black tracking-tighter text-primary dark:text-on-surface flex items-center gap-stack-sm"
+                    href="#"><span class="material-symbols-outlined fill text-[32px]">stars</span> Figtree Club</a>
+                <nav class="hidden md:flex gap-stack-md ml-stack-lg">
+                    <a class="text-secondary dark:text-on-secondary-container font-title-md text-title-md hover:text-primary dark:hover:text-on-surface transition-colors duration-200 cursor-pointer active:opacity-70"
+                        href="#">카테고리</a>
+                    <a class="text-secondary dark:text-on-secondary-container font-title-md text-title-md hover:text-primary dark:hover:text-on-surface transition-colors duration-200 cursor-pointer active:opacity-70"
+                        href="#">브랜드</a>
+                    <a class="text-primary dark:text-on-surface border-b-2 border-primary dark:border-on-surface pb-1 font-title-md text-title-md hover:text-primary dark:hover:text-on-surface transition-colors duration-200 cursor-pointer active:opacity-70"
+                        href="#">공급업체</a>
+                </nav>
+            </div>
+            <!-- Search (Center) -->
+            <div class="hidden lg:flex flex-1 max-w-xl mx-gutter relative">
+                <span
+                    class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-secondary">search</span>
+                <input
+                    class="w-full h-12 pl-12 pr-4 bg-surface-container-lowest border border-outline-variant rounded-full text-body-sm font-body-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors placeholder:text-secondary"
+                    placeholder="공급업체 검색..." type="text" />
+            </div>
+            <!-- Actions -->
+            <div class="flex items-center gap-stack-md">
+                <button class="text-secondary hover:text-primary transition-colors p-2 hidden sm:block">
+                    <span class="material-symbols-outlined">shopping_cart</span>
+                </button>
+                <button class="text-secondary hover:text-primary transition-colors p-2 hidden sm:block">
+                    <span class="material-symbols-outlined">account_circle</span>
+                </button>
+                <button
+                    class="font-title-md text-title-md text-secondary hover:text-primary transition-colors hidden md:block">로그인</button>
+                <button
+                    class="bg-primary text-on-primary font-title-md text-title-md px-6 py-3 rounded-full hover:bg-primary-container transition-colors">가입하기</button>
+            </div>
+        </div>
+    </header>
+    <!-- Main Layout Grid -->
+    <div class="flex-1 max-w-container-max mx-auto w-full flex flex-col md:flex-row relative">
+        <!-- Main Content Area -->
+        <main class="flex-1 min-w-0 w-full px-margin-mobile md:px-margin-desktop py-stack-lg md:py-[64px]">
+            <!-- Supplier Profile Header (Showroom Style) -->
+            <section class="mb-[64px] flex flex-col md:flex-row gap-gutter md:gap-[64px] items-start md:items-center">
+                <!-- Avatar -->
+                <div
+                    class="w-[120px] h-[120px] md:w-[160px] md:h-[160px] rounded-full border border-outline-variant overflow-hidden shrink-0 bg-surface-container-lowest flex items-center justify-center p-4">
+                    <img alt="Premium Vintage Supplier" class="w-full h-full object-contain rounded-full"
+                        data-alt="A high-quality, professional logo for a vintage clothing supplier, featuring a clean, minimalist design with strong typography, set against a pristine white background. The aesthetic is modern corporate, exuding reliability and exclusivity, strictly adhering to a monochromatic palette."
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuChxNVvOAq65lFx4-DNVrpzbkAyLz98qhsVlqibkg3CDZNcuBOyk0NsS5j8Yq6oP7J5gAl5kx-YV0VBVMiyiV-9oLU-GHKrmBqHLhBQyjC8fuQaOwuDeoqPRFen8ZttUPwx28AfNzpua6F9xynduBAE5jZe222h2WymE0ChofvywvyYdgI4erQ9L9rtrEIGXNwVOUe9fawHEFaUrvHkaqSHsaLoXwOTWTwpk62F6zgnD_F6ZlAiHkybeUoTqNB7eS8AVA42cZsabJS7" />
+                </div>
+                <!-- Info -->
+                <div class="flex flex-col gap-stack-sm flex-1">
+                    <div class="flex items-center gap-stack-sm">
+                        <h1 class="font-display-lg text-display-lg text-primary">빈티지 아카이브 Co.</h1>
+                        <div class="bg-primary text-on-primary rounded-full p-1 flex items-center justify-center"
+                            title="인증된 공급업체">
+                            <span class="material-symbols-outlined text-[16px] fill">check</span>
+                        </div>
+                    </div>
+                    <p class="font-body-lg text-body-lg text-secondary max-w-2xl mt-stack-sm">현대적인 리셀러를 위한 프리미엄 A급 빈티지
+                        컬렉션을 큐레이팅합니다. 90년대 스트리트웨어, 헤리티지 데님, 데드스탁 스포츠웨어 전문. 모든 제품은 직접 검수하고 인증을 마쳤습니다.</p>
+                    <!-- Stats Grid -->
+                    <div class="flex flex-wrap gap-gutter mt-stack-md pt-stack-md border-t border-outline-variant">
+                        <div class="flex flex-col">
+                            <span
+                                class="font-label-caps text-label-caps text-secondary uppercase tracking-widest">평점</span>
+                            <div class="flex items-center gap-1 mt-1">
+                                <span class="material-symbols-outlined fill text-primary text-[18px]">star</span>
+                                <span class="font-title-md text-title-md text-primary">4.9</span>
+                                <span class="font-body-sm text-body-sm text-secondary">(124)</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="font-label-caps text-label-caps text-secondary uppercase tracking-widest">응답
+                                시간</span>
+                            <span class="font-title-md text-title-md text-primary mt-1">2시간 이내</span>
+                        </div>
+                        <div class="flex flex-col">
+                            <span
+                                class="font-label-caps text-label-caps text-secondary uppercase tracking-widest">위치</span>
+                            <div class="flex items-center gap-1 mt-1">
+                                <span class="material-symbols-outlined text-secondary text-[18px]">location_on</span>
+                                <span class="font-title-md text-title-md text-primary">런던, 영국</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="font-label-caps text-label-caps text-secondary uppercase tracking-widest">총
+                                판매량</span>
+                            <span class="font-title-md text-title-md text-primary mt-1">2,400개 이상 번들</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- CTA -->
+                <div class="shrink-0 w-full md:w-auto mt-stack-md md:mt-0">
+                    <button
+                        class="w-full md:w-auto bg-surface-container-lowest border border-outline-variant text-primary font-title-md text-title-md px-8 py-4 rounded-full hover:bg-surface-container-low transition-colors flex items-center justify-center gap-2">
+                        <span class="material-symbols-outlined">chat_bubble</span>
+                        공급업체에 문의하기
+                    </button>
+                </div>
+            </section>
+            <!-- Filters & Sort Bar -->
+            <div
+                class="flex flex-col sm:flex-row justify-between items-center mb-stack-lg gap-stack-md pb-stack-md border-b border-outline-variant">
+                <h2 class="font-headline-lg text-headline-lg text-primary">판매 중인 재고</h2>
+                <div class="flex items-center gap-stack-md w-full sm:w-auto">
+                    <div class="relative w-full sm:w-auto">
+                        <select
+                            class="appearance-none bg-surface-container-lowest border border-outline-variant text-primary font-body-sm text-body-sm py-2 pl-4 pr-10 rounded-full focus:outline-none focus:border-primary cursor-pointer w-full">
+                            <option>정렬 기준: 최신순</option>
+                            <option>가격: 낮은 순</option>
+                            <option>가격: 높은 순</option>
+                            <option>최고 평점순</option>
+                        </select>
+                        <span
+                            class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none">expand_more</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Product Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-gutter">
+                <!-- Card 1 -->
+                <article
+                    class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden hover-ambient-shadow cursor-pointer group flex flex-col">
+                    <div class="relative aspect-[4/5] bg-surface-variant overflow-hidden">
+                        <!-- Labels -->
+                        <div class="absolute top-3 left-3 z-10 flex flex-col gap-1">
+                            <span
+                                class="bg-primary text-on-primary font-label-caps text-[10px] px-2 py-1 rounded-sm uppercase tracking-widest">프리미엄
+                                A급</span>
+                        </div>
+                        <button
+                            class="absolute top-3 right-3 z-10 p-2 bg-surface-container-lowest/80 backdrop-blur-sm rounded-full text-secondary hover:text-primary transition-colors">
+                            <span class="material-symbols-outlined text-[20px]">favorite</span>
+                        </button>
+                        <img alt="Vintage Hoodies"
+                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            data-alt="A curated bundle of vintage hooded sweatshirts folded neatly on a clean white background. The lighting is bright and even, highlighting the textures of the heavy cotton. The colors are muted, adhering to a minimalist aesthetic. The composition is straightforward and utilitarian, typical of high-end wholesale catalogs."
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCnaFtX1ADZS4ApWe10xfsSSibCDv3c6k_N9I8d-fomLthlP32IVDVJeHdVHdAAo2oqXC-9TcaxfmlnP8vdzqxjCBjVxibPP-CJIypr7r_vI_zODFHO5daJf07ToYbmhS9RRjAv-r-OdGciDg2h_X6xz7Y-K5NE6rWOrkNONmc6Q9NIOPgkv2XMMiKerY_A3CHFjqJLw1MKs0MeO-TPajn8VSTDrjfwyEwNhP8LFTKGJI231c9PibS7SEBiyftWHmklCF0mAlo9cm5" />
+                    </div>
+                    <div class="p-4 flex flex-col flex-1 gap-2">
+                        <div class="flex justify-between items-start gap-2">
+                            <h3 class="font-title-md text-title-md text-primary line-clamp-2">빈티지 90년대 헤비웨이트 후디 번들</h3>
+                        </div>
+                        <div class="flex items-center gap-1 mt-auto">
+                            <span class="material-symbols-outlined fill text-primary text-[14px]">star</span>
+                            <span class="font-body-sm text-body-sm text-primary font-semibold">4.8</span>
+                        </div>
+                        <div class="flex items-end justify-between mt-1">
+                            <div>
+                                <span class="font-headline-lg text-[24px] font-bold text-primary">₩595,000</span>
+                                <span class="font-body-sm text-body-sm text-secondary ml-1">/ 20개</span>
+                            </div>
+                            <span class="font-body-sm text-body-sm text-secondary">개당 ₩30,000</span>
+                        </div>
+                        <div
+                            class="bg-surface-variant text-on-surface-variant font-label-caps text-[10px] px-2 py-1 rounded-sm uppercase tracking-widest self-start mt-2">
+                            무료 배송</div>
+                    </div>
+                </article>
+                <!-- Card 2 -->
+                <article
+                    class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden hover-ambient-shadow cursor-pointer group flex flex-col">
+                    <div class="relative aspect-[4/5] bg-surface-variant overflow-hidden">
+                        <div class="absolute top-3 left-3 z-10 flex flex-col gap-1">
+                            <span
+                                class="bg-primary text-on-primary font-label-caps text-[10px] px-2 py-1 rounded-sm uppercase tracking-widest">15%
+                                할인</span>
+                        </div>
+                        <button
+                            class="absolute top-3 right-3 z-10 p-2 bg-surface-container-lowest/80 backdrop-blur-sm rounded-full text-secondary hover:text-primary transition-colors">
+                            <span class="material-symbols-outlined text-[20px]">favorite</span>
+                        </button>
+                        <img alt="Graphic Tees"
+                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            data-alt="A stack of vintage graphic t-shirts laid flat against a pristine, light grey studio backdrop. The lighting is soft and shadowless, emphasizing the faded, retro prints on the shirts. The overall color palette is subdued, fitting a sophisticated, minimalist wholesale presentation."
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5nMd2Je0c4jXXYY2FCfEMzbPEOJgVj0C2U4wsKjuey4572wK8OwwnZ2XsZqmSQC6m7VrJrJy1vhgH4EVSuB2VVw_gg0qP6ZEcK6rNaNAmHFF24mQPNP49lIS7A_i-WCsrWd1bjdMzevP25qd4XWx4YfpFyelGlg4iiC_2AIYa_CsORMuFJFVtN6AsHYrOjir9KfQQXWhg8de3AkaQRJiXU-odEZ-AKEKPGYocIbapDaLLLxWrX00FHOHtizKCwol_lFCapz07btdq" />
+                    </div>
+                    <div class="p-4 flex flex-col flex-1 gap-2">
+                        <div class="flex justify-between items-start gap-2">
+                            <h3 class="font-title-md text-title-md text-primary line-clamp-2">다양한 프로 스포츠 그래픽 티셔츠</h3>
+                        </div>
+                        <div class="flex items-center gap-1 mt-auto">
+                            <span class="material-symbols-outlined fill text-primary text-[14px]">star</span>
+                            <span class="font-body-sm text-body-sm text-primary font-semibold">5.0</span>
+                        </div>
+                        <div class="flex items-end justify-between mt-1">
+                            <div>
+                                <span class="font-headline-lg text-[24px] font-bold text-error">₩306,000</span>
+                                <span class="font-body-sm text-body-sm text-secondary line-through ml-1">₩357,000</span>
+                            </div>
+                            <span class="font-body-sm text-body-sm text-secondary">개당 ₩6,000</span>
+                        </div>
+                        <div
+                            class="bg-surface-variant text-on-surface-variant font-label-caps text-[10px] px-2 py-1 rounded-sm uppercase tracking-widest self-start mt-2">
+                            50개</div>
+                    </div>
+                </article>
+                <!-- Card 3 -->
+                <article
+                    class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden hover-ambient-shadow cursor-pointer group flex flex-col">
+                    <div class="relative aspect-[4/5] bg-surface-variant overflow-hidden">
+                        <button
+                            class="absolute top-3 right-3 z-10 p-2 bg-surface-container-lowest/80 backdrop-blur-sm rounded-full text-secondary hover:text-primary transition-colors">
+                            <span class="material-symbols-outlined text-[20px]">favorite</span>
+                        </button>
+                        <img alt="Denim Jackets"
+                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            data-alt="A collection of vintage blue denim jackets hanging neatly on industrial metal racks against a stark white wall. The image conveys a high-end warehouse aesthetic with precise, cool-toned lighting. The focus is entirely on the quality and texture of the denim, avoiding any cluttered background."
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDT_kjRi3m0p1kAiFK8-Y-GPN-Ny6pBaqLcXwe7Ojx3_x1I4LEmGpV_bkVQNVQP0wGyMZtTiNUjI2QiTOqczN_JaK2A38wPXzHfZC-RL_kOX-gWWNsj7OJwZUWNfxY0_H2aKFDmmNo6_wKgDq8CZRwbJT82cRV00825HLpvytlgCtlA5xqOhrBTrVBkr_7mAlnBnL7pG-asT8lKZqxmkKuDm7HGgm-KYt3x2-9cafDV5wnPVIIt_xy8Dp1h65dVl39Stu-hjHCsAsTG" />
+                    </div>
+                    <div class="p-4 flex flex-col flex-1 gap-2">
+                        <div class="flex justify-between items-start gap-2">
+                            <h3 class="font-title-md text-title-md text-primary line-clamp-2">클래식 리바이스 데님 재킷 믹스</h3>
+                        </div>
+                        <div class="flex items-center gap-1 mt-auto">
+                            <span class="material-symbols-outlined fill text-primary text-[14px]">star</span>
+                            <span class="font-body-sm text-body-sm text-primary font-semibold">4.7</span>
+                        </div>
+                        <div class="flex items-end justify-between mt-1">
+                            <div>
+                                <span class="font-headline-lg text-[24px] font-bold text-primary">₩714,000</span>
+                                <span class="font-body-sm text-body-sm text-secondary ml-1">/ 15개</span>
+                            </div>
+                            <span class="font-body-sm text-body-sm text-secondary">개당 ₩48,000</span>
+                        </div>
+                        <div
+                            class="bg-surface-variant text-on-surface-variant font-label-caps text-[10px] px-2 py-1 rounded-sm uppercase tracking-widest self-start mt-2">
+                            A/B급</div>
+                    </div>
+                </article>
+                <!-- Card 4 -->
+                <article
+                    class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden hover-ambient-shadow cursor-pointer group flex flex-col">
+                    <div class="relative aspect-[4/5] bg-surface-variant overflow-hidden">
+                        <button
+                            class="absolute top-3 right-3 z-10 p-2 bg-surface-container-lowest/80 backdrop-blur-sm rounded-full text-secondary hover:text-primary transition-colors">
+                            <span class="material-symbols-outlined text-[20px]">favorite</span>
+                        </button>
+                        <img alt="Sweatshirts"
+                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            data-alt="Folded vintage crewneck sweatshirts in muted earth tones, arranged geometrically on a flat white surface. The minimalist composition and sharp overhead lighting highlight the fabric's soft texture and subtle fading. The scene is devoid of distractions, presenting the garments with clinical precision."
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAal7BEWm9uNfXuicR9jcXQm4ZQlG4pIA0odASxjmAOHrp8UYMWUMX7Fs1md5S3-tQHiTs7Y0hngO3QCgMjrtfEcYofQqerOeMaKtHx_zTVlb2oblK7XzZGiMZqNDvpGLcY-mvDw4A4Pd9JwtEQShI7kh5iXZtlEJitsno01ps-0ZLvQP0oxRJdrshokhySkliIRJRj3IoBYXkmg1WDHCOfU6lbyw1x6BWsfp77UI-Yk0cUHBuovTw6R34zuZyrxTJNb0INKUhTPUb6" />
+                    </div>
+                    <div class="p-4 flex flex-col flex-1 gap-2">
+                        <div class="flex justify-between items-start gap-2">
+                            <h3 class="font-title-md text-title-md text-primary line-clamp-2">어스 톤 크루넥 스웨트셔츠</h3>
+                        </div>
+                        <div class="flex items-center gap-1 mt-auto">
+                            <span class="material-symbols-outlined fill text-primary text-[14px]">star</span>
+                            <span class="font-body-sm text-body-sm text-primary font-semibold">4.9</span>
+                        </div>
+                        <div class="flex items-end justify-between mt-1">
+                            <div>
+                                <span class="font-headline-lg text-[24px] font-bold text-primary">₩476,000</span>
+                                <span class="font-body-sm text-body-sm text-secondary ml-1">/ 25개</span>
+                            </div>
+                            <span class="font-body-sm text-body-sm text-secondary">개당 ₩19,000</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            <!-- Pagination (Minimalist) -->
+            <div class="flex justify-center items-center gap-stack-md mt-[64px]">
+                <button
+                    class="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-secondary hover:text-primary hover:border-primary transition-colors disabled:opacity-50"
+                    disabled="">
+                    <span class="material-symbols-outlined">chevron_left</span>
+                </button>
+                <div class="flex items-center gap-2 font-body-sm text-body-sm">
+                    <button
+                        class="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center">1</button>
+                    <button
+                        class="w-10 h-10 rounded-full hover:bg-surface-container text-primary flex items-center justify-center transition-colors">2</button>
+                    <button
+                        class="w-10 h-10 rounded-full hover:bg-surface-container text-primary flex items-center justify-center transition-colors">3</button>
+                    <span class="text-secondary">...</span>
+                    <button
+                        class="w-10 h-10 rounded-full hover:bg-surface-container text-primary flex items-center justify-center transition-colors">12</button>
+                </div>
+                <button
+                    class="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-secondary hover:text-primary hover:border-primary transition-colors">
+                    <span class="material-symbols-outlined">chevron_right</span>
+                </button>
+            </div>
+        </main>
+    </div>
+    <!-- Footer -->
+    <footer
+        class="bg-surface-container-lowest dark:bg-inverse-surface full-width bottom-0 border-t border-outline-variant dark:border-outline flat no shadows mt-auto">
+        <div
+            class="w-full py-stack-lg px-margin-mobile md:px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-stack-md max-w-container-max mx-auto">
+            <div class="font-headline-lg text-headline-lg text-primary flex items-center gap-2"><span
+                    class="material-symbols-outlined fill text-[24px]">stars</span> Figtree Club</div>
+            <nav class="flex flex-wrap justify-center gap-gutter">
+                <a class="text-secondary dark:text-on-surface-variant font-body-sm text-body-sm font-label-caps text-label-caps hover:text-primary dark:hover:text-on-surface transition-colors"
+                    href="#">서비스 약관</a>
+                <a class="text-secondary dark:text-on-surface-variant font-body-sm text-body-sm font-label-caps text-label-caps hover:text-primary dark:hover:text-on-surface transition-colors"
+                    href="#">개인정보 처리방침</a>
+                <a class="text-secondary dark:text-on-surface-variant font-body-sm text-body-sm font-label-caps text-label-caps hover:text-primary dark:hover:text-on-surface transition-colors"
+                    href="#">공급업체 가이드라인</a>
+                <a class="text-secondary dark:text-on-surface-variant font-body-sm text-body-sm font-label-caps text-label-caps hover:text-primary dark:hover:text-on-surface transition-colors"
+                    href="#">고객 센터</a>
+                <a class="text-secondary dark:text-on-surface-variant font-body-sm text-body-sm font-label-caps text-label-caps hover:text-primary dark:hover:text-on-surface transition-colors"
+                    href="#">배송 파트너</a>
+            </nav>
+            <div class="text-secondary dark:text-on-surface-variant font-body-sm text-body-sm">© 2024 Figtree Club. 모든
+                권리 보유.</div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script src="auth.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
