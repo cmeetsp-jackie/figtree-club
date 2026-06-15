@@ -336,20 +336,82 @@
         <a href="messages.html"><span class="material-symbols-outlined">chat</span><span>메시지</span></a>
         <a href="#"><span class="material-symbols-outlined">settings</span><span>설정</span></a>
     </nav>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../supabase.js"></script>
+    <script src="../db.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script>
-        // Example video (HLS stream from real supplier)
+        let currentSeller = null;
+
+        // Auth check + load inventory
+        (async () => {
+            const user = await DB.getUser();
+            if (!user) { window.location.href = 'login.html'; return; }
+            currentSeller = await DB.getSellerProfile(user.id);
+            if (!currentSeller) { window.location.href = 'login.html'; return; }
+            // Update sidebar name
+            document.querySelectorAll('.font-semibold.truncate').forEach(el => {
+                if (el.textContent.includes('빈티지 서플라이')) el.textContent = currentSeller.business_name;
+            });
+            await loadInventory();
+        })();
+
+        async function loadInventory() {
+            const bundles = await DB.getSellerBundles(currentSeller.id);
+            if (bundles.length === 0) return;
+            document.getElementById('emptyState').classList.add('hidden');
+            document.getElementById('inventoryTable').classList.remove('hidden');
+            const tbody = document.getElementById('inventoryBody');
+            tbody.innerHTML = '';
+            bundles.forEach(b => renderBundleRow(b));
+        }
+
+        function renderBundleRow(b) {
+            const tbody = document.getElementById('inventoryBody');
+            const perPiece = b.quantity > 0 ? Math.round(b.price / b.quantity) : 0;
+            const statusMap = {
+                'active': '<span class="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full bg-green-100 text-green-800">판매 중</span>',
+                'draft': '<span class="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full bg-gray-100 text-gray-600">임시저장</span>',
+                'sold_out': '<span class="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full bg-red-100 text-red-800">품절</span>'
+            };
+            const thumb = b.photos && b.photos[0]
+                ? '<img src="' + b.photos[0] + '" class="w-full h-full object-cover" alt="">'
+                : '<span class="material-symbols-outlined text-secondary">image</span>';
+            const row = document.createElement('tr');
+            row.className = 'hover:bg-surface-container-low transition-colors';
+            row.innerHTML =
+                '<td class="px-5 py-4"><div class="flex items-center gap-3">' +
+                '<div class="w-12 h-12 rounded-lg bg-surface-container-high overflow-hidden flex-shrink-0 flex items-center justify-center">' + thumb + '</div>' +
+                '<div><p class="text-sm font-semibold">' + b.name + '</p><p class="text-xs text-secondary">등급: ' + (b.grade || '-') + '</p></div></div></td>' +
+                '<td class="px-5 py-4 text-sm text-secondary hidden md:table-cell">' + (b.category || '-') + '</td>' +
+                '<td class="px-5 py-4 text-right"><p class="text-sm font-bold">₩' + b.price.toLocaleString('ko-KR') + '</p>' +
+                (perPiece > 0 ? '<p class="text-xs text-secondary">₩' + perPiece.toLocaleString('ko-KR') + '/개</p>' : '') + '</td>' +
+                '<td class="px-5 py-4 text-center text-sm hidden md:table-cell">' + b.quantity + '벌</td>' +
+                '<td class="px-5 py-4 text-center">' + (statusMap[b.status] || '') + '</td>' +
+                '<td class="px-5 py-4 text-center text-sm text-secondary hidden md:table-cell">' + (b.views || 0) + '</td>' +
+                '<td class="px-5 py-4 text-right"><button onclick="deleteBundle(\'' + b.id + '\', this)" class="text-secondary hover:text-error transition-colors"><span class="material-symbols-outlined text-[20px]">delete</span></button></td>';
+            tbody.appendChild(row);
+        }
+
+        async function deleteBundle(id, btn) {
+            if (!confirm('이 번들을 삭제하시겠습니까?')) return;
+            try {
+                await DB.deleteBundle(id);
+                btn.closest('tr').remove();
+                if (document.getElementById('inventoryBody').children.length === 0) {
+                    document.getElementById('emptyState').classList.remove('hidden');
+                    document.getElementById('inventoryTable').classList.add('hidden');
+                }
+            } catch (err) { alert('삭제 실패: ' + err.message); }
+        }
+
+        // Example video
         (function() {
             const video = document.getElementById('exampleVideo');
             const src = 'https://d3j4cclbjn29bj.cloudfront.net/9219561521390/fc47c5fa-ddd7-4506-a0a7-cde1473c3c30/fc47c5fa-ddd7-4506-a0a7-cde1473c3c30_playlist.m3u8';
-            if (video) {
-                if (Hls.isSupported()) {
-                    var hls = new Hls();
-                    hls.loadSource(src);
-                    hls.attachMedia(video);
-                } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                    video.src = src;
-                }
+            if (video && typeof Hls !== 'undefined') {
+                if (Hls.isSupported()) { var hls = new Hls(); hls.loadSource(src); hls.attachMedia(video); }
+                else if (video.canPlayType('application/vnd.apple.mpegurl')) video.src = src;
             }
         })();
 
@@ -440,63 +502,72 @@
         qtyInput.addEventListener('input', calcPerPiece);
 
         // Save / Publish
-        function saveDraft() {
-            const name = document.getElementById('bundleName').value.trim();
-            if (!name) { alert('번들 이름을 입력해주세요.'); return; }
-            addToTable(name, 'draft');
-            document.getElementById('newBundleModal').classList.remove('show');
-            document.getElementById('bundleForm').reset();
-            photoPreview.innerHTML = '';
-            perPieceInfo.classList.add('hidden');
-        }
-
-        function publishBundle() {
+        async function saveBundle(status) {
             const name = document.getElementById('bundleName').value.trim();
             const category = document.getElementById('bundleCategory').value;
-            const price = document.getElementById('bundlePrice').value;
-            const qty = document.getElementById('bundleQty').value;
+            const price = parseInt(document.getElementById('bundlePrice').value) || 0;
+            const qty = parseInt(document.getElementById('bundleQty').value) || 0;
             const grade = document.getElementById('bundleGrade').value;
 
-            if (!name || !category || !price || !qty || !grade) {
+            if (!name) { alert('번들 이름을 입력해주세요.'); return; }
+            if (status === 'active' && (!category || !price || !qty || !grade)) {
                 alert('필수 항목(*)을 모두 입력해주세요.');
                 return;
             }
-            addToTable(name, 'active');
-            document.getElementById('newBundleModal').classList.remove('show');
-            document.getElementById('bundleForm').reset();
-            photoPreview.innerHTML = '';
-            perPieceInfo.classList.add('hidden');
+
+            const btns = document.querySelectorAll('.modal-overlay button');
+            btns.forEach(b => b.disabled = true);
+
+            try {
+                // Upload media
+                let photoUrls = [], videoUrls = [];
+                if (uploadedFiles.length > 0 || uploadedVideos.length > 0) {
+                    const media = await DB.uploadBundleMedia(uploadedFiles, uploadedVideos, currentSeller.id);
+                    photoUrls = media.photoUrls;
+                    videoUrls = media.videoUrls;
+                }
+
+                const bundle = await DB.createBundle({
+                    seller_id: currentSeller.id,
+                    name,
+                    category: category || '미분류',
+                    brand: document.getElementById('bundleBrand').value.trim() || null,
+                    price,
+                    quantity: qty,
+                    grade: grade || '미설정',
+                    size_range: document.getElementById('bundleSize').value.trim() || null,
+                    description: document.getElementById('bundleDesc').value.trim() || null,
+                    dispatch_time: document.getElementById('bundleDispatch').value,
+                    weight: parseFloat(document.getElementById('bundleWeight').value) || null,
+                    photos: photoUrls,
+                    videos: videoUrls,
+                    status
+                });
+
+                // Show in table
+                document.getElementById('emptyState').classList.add('hidden');
+                document.getElementById('inventoryTable').classList.remove('hidden');
+                renderBundleRow(bundle);
+
+                // Reset form
+                document.getElementById('newBundleModal').classList.remove('show');
+                document.getElementById('bundleForm').reset();
+                photoPreview.innerHTML = '';
+                videoPreview.innerHTML = '';
+                uploadedFiles = [];
+                uploadedVideos = [];
+                perPieceInfo.classList.add('hidden');
+
+                alert(status === 'active' ? '번들이 등록되었습니다!' : '임시저장되었습니다.');
+            } catch (err) {
+                alert('저장 실패: ' + err.message);
+            } finally {
+                btns.forEach(b => b.disabled = false);
+            }
         }
 
-        function addToTable(name, status) {
-            document.getElementById('emptyState').classList.add('hidden');
-            const table = document.getElementById('inventoryTable');
-            const tbody = document.getElementById('inventoryBody');
-            table.classList.remove('hidden');
-
-            const category = document.getElementById('bundleCategory').value || '-';
-            const price = parseInt(document.getElementById('bundlePrice').value) || 0;
-            const qty = parseInt(document.getElementById('bundleQty').value) || 0;
-            const perPiece = qty > 0 ? Math.round(price / qty) : 0;
-            const statusLabel = status === 'active'
-                ? '<span class="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full bg-green-100 text-green-800">판매 중</span>'
-                : '<span class="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full bg-gray-100 text-gray-600">임시저장</span>';
-
-            const row = document.createElement('tr');
-            row.className = 'hover:bg-surface-container-low transition-colors';
-            row.innerHTML =
-                '<td class="px-5 py-4"><div class="flex items-center gap-3">' +
-                '<div class="w-12 h-12 rounded-lg bg-surface-container-high overflow-hidden flex-shrink-0 flex items-center justify-center"><span class="material-symbols-outlined text-secondary">image</span></div>' +
-                '<div><p class="text-sm font-semibold">' + name + '</p><p class="text-xs text-secondary">방금 등록됨</p></div></div></td>' +
-                '<td class="px-5 py-4 text-sm text-secondary hidden md:table-cell">' + category + '</td>' +
-                '<td class="px-5 py-4 text-right"><p class="text-sm font-bold">' + (price > 0 ? '₩' + price.toLocaleString('ko-KR') : '미설정') + '</p>' +
-                (perPiece > 0 ? '<p class="text-xs text-secondary">₩' + perPiece.toLocaleString('ko-KR') + '/개</p>' : '') + '</td>' +
-                '<td class="px-5 py-4 text-center text-sm hidden md:table-cell">' + (qty > 0 ? qty + '벌' : '-') + '</td>' +
-                '<td class="px-5 py-4 text-center">' + statusLabel + '</td>' +
-                '<td class="px-5 py-4 text-center text-sm text-secondary hidden md:table-cell">0</td>' +
-                '<td class="px-5 py-4 text-right"><button class="text-secondary hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]">more_vert</span></button></td>';
-            tbody.prepend(row);
-        }
+        function saveDraft() { saveBundle('draft'); }
+        function publishBundle() { saveBundle('active'); }
 
         // Modal close on overlay click
         document.getElementById('newBundleModal').addEventListener('click', (e) => {
