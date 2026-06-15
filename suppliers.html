@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>공급업체 - Figtree Club</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Manrope:wght@600;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: { extend: {
+                colors: {
+                    "primary": "#000000", "on-primary": "#ffffff", "secondary": "#5e5e5e",
+                    "surface": "#ffffff", "surface-container-low": "#f6f3f2",
+                    "surface-container-high": "#eae7e7", "surface-container": "#f5f5f5",
+                    "outline-variant": "#e0e0e0", "on-surface": "#1c1b1b",
+                    "on-surface-variant": "#4c4546", "background": "#fafafa",
+                    "error": "#ba1a1a", "accent": "#FF3D00", "on-accent": "#ffffff"
+                },
+                borderRadius: { "DEFAULT": "0.5rem", "lg": "0.75rem", "xl": "1rem", "2xl": "1.5rem", "full": "9999px" },
+                fontFamily: { "display": ["Manrope"], "body": ["Inter"] },
+                fontSize: {
+                    "display-lg": ["52px", { lineHeight: "58px", letterSpacing: "-0.03em", fontWeight: "900" }],
+                    "headline-lg": ["32px", { lineHeight: "40px", fontWeight: "600" }],
+                    "title-md": ["20px", { lineHeight: "28px", fontWeight: "600" }],
+                    "body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+                    "body-sm": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+                    "label-caps": ["12px", { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "600" }]
+                },
+                spacing: { "container-max": "1440px", "margin-mobile": "20px", "margin-desktop": "64px", "gutter": "24px" }
+            }}
+        }
+    </script>
+    <style>
+        .ghost-input { border: 1px solid #e0e0e0; transition: border-color 0.2s; }
+        .ghost-input:focus { border-color: #000; outline: none; box-shadow: none; }
+        .vendor-card {
+            background: #fff; border: 1px solid #e0e0e0; border-radius: 16px;
+            padding: 20px; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer;
+        }
+        .vendor-card:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(0,0,0,0.1); }
+        .filter-chip {
+            padding: 6px 16px; border-radius: 999px; border: 1px solid #e0e0e0;
+            font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s;
+            background: #fff; color: #5e5e5e;
+        }
+        .filter-chip:hover { border-color: #000; color: #000; }
+        .filter-chip.active { background: #000; color: #fff; border-color: #000; }
+    </style>
+</head>
+<body class="bg-background min-h-screen flex flex-col font-body">
+    <!-- Top Banner -->
+    <div class="w-full bg-accent text-on-accent text-center py-3 text-sm font-bold tracking-wide">
+        리셀러들이 최고의 재고를 소싱하는 곳 &mdash; <a href="signup.html" class="underline hover:opacity-80">지금 가입하고 시작하기 &rarr;</a>
+    </div>
+
+    <!-- Nav -->
+    <nav class="bg-surface w-full sticky top-0 z-50 border-b border-outline-variant">
+        <div class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop h-20 max-w-container-max mx-auto">
+            <div class="flex items-center gap-8">
+                <a class="font-display text-2xl font-black tracking-tighter" href="index.html">Figtree Club</a>
+                <div class="hidden md:flex items-center gap-6">
+                    <a class="text-secondary font-display text-title-md hover:text-primary transition-colors" href="index.html">카테고리</a>
+                    <a class="text-secondary font-display text-title-md hover:text-primary transition-colors" href="index.html">브랜드</a>
+                    <a class="text-primary font-display text-title-md font-bold" href="suppliers.html">공급업체</a>
+                </div>
+            </div>
+            <div class="flex-1 max-w-md mx-6 hidden md:block">
+                <div class="relative">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary">search</span>
+                    <input class="w-full ghost-input rounded-full py-2 pl-10 pr-4 text-sm" placeholder="공급업체 검색..." id="searchInput">
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="seller/login.html" class="hidden md:flex items-center gap-1 text-secondary text-sm hover:text-primary">
+                    <span class="material-symbols-outlined text-[20px]">storefront</span>판매자
+                </a>
+                <button class="text-primary hover:opacity-70"><span class="material-symbols-outlined">shopping_cart</span></button>
+                <a class="text-secondary text-sm hover:text-primary hidden md:block" href="login.html">로그인</a>
+                <a class="bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-semibold" href="signup.html">회원가입</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <section class="w-full bg-surface border-b border-outline-variant">
+        <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-12 md:py-16">
+            <h1 class="font-display text-display-lg mb-3">공급업체<span class="text-accent">.</span></h1>
+            <p class="text-secondary text-body-lg max-w-lg">검증된 아시아 도매 공급업체를 찾아보세요. 평점, 응답 시간, 취급 품목으로 최적의 파트너를 선택하세요.</p>
+        </div>
+    </section>
+
+    <!-- Filters -->
+    <section class="w-full bg-surface border-b border-outline-variant sticky top-20 z-40">
+        <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-3 flex items-center gap-3 overflow-x-auto" style="scrollbar-width:none">
+            <span class="text-sm font-semibold text-secondary flex-shrink-0">필터:</span>
+            <button class="filter-chip active" data-filter="all">전체</button>
+            <button class="filter-chip" data-filter="한국">한국</button>
+            <button class="filter-chip" data-filter="일본">일본</button>
+            <button class="filter-chip" data-filter="태국">태국</button>
+            <button class="filter-chip" data-filter="홍콩">홍콩</button>
+            <button class="filter-chip" data-filter="싱가포르">싱가포르</button>
+            <button class="filter-chip" data-filter="영국">영국</button>
+            <div class="flex-1"></div>
+            <select id="sortSelect" class="ghost-input rounded-lg px-3 py-1.5 text-sm bg-white flex-shrink-0">
+                <option value="rating">평점 높은순</option>
+                <option value="reviews">리뷰 많은순</option>
+                <option value="newest">최근 가입순</option>
+            </select>
+        </div>
+    </section>
+
+    <!-- Vendor Grid -->
+    <main class="flex-1 w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-8">
+        <p class="text-sm text-secondary mb-6" id="vendorCount">공급업체를 불러오는 중...</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="vendorGrid">
+        </div>
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden py-20 text-center">
+            <span class="material-symbols-outlined text-[48px] text-secondary mb-3 block">storefront</span>
+            <p class="font-display text-xl font-bold mb-2">등록된 공급업체가 없습니다</p>
+            <p class="text-sm text-secondary">곧 검증된 공급업체들이 등록될 예정입니다.</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-surface border-t border-outline-variant mt-auto">
+        <div class="w-full py-8 px-margin-mobile md:px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-4 max-w-container-max mx-auto">
+            <div class="font-display text-xl font-black tracking-tighter">Figtree Club</div>
+            <div class="flex flex-wrap justify-center gap-6">
+                <a class="text-secondary text-sm hover:text-primary" href="#">서비스 이용약관</a>
+                <a class="text-secondary text-sm hover:text-primary" href="#">개인정보 처리방침</a>
+                <a class="text-secondary text-sm hover:text-primary" href="#">고객 센터</a>
+                <a class="text-secondary text-sm font-semibold hover:text-primary" href="seller/login.html">판매자 센터</a>
+            </div>
+            <div class="text-secondary text-sm">&copy; 2026 Figtree Club</div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script src="db.js"></script>
+    <script>
+        let allVendors = [];
+
+        async function loadVendors() {
+            try {
+                const { data, error } = await db.from('sellers').select('*').order('rating', { ascending: false });
+                if (error) throw error;
+                allVendors = data || [];
+                renderVendors(allVendors);
+            } catch (e) {
+                console.error(e);
+                document.getElementById('vendorCount').textContent = '공급업체 로드 실패';
+            }
+        }
+
+        function renderVendors(vendors) {
+            const grid = document.getElementById('vendorGrid');
+            const empty = document.getElementById('emptyState');
+            const count = document.getElementById('vendorCount');
+            grid.innerHTML = '';
+
+            if (vendors.length === 0) {
+                empty.classList.remove('hidden');
+                count.textContent = '';
+                return;
+            }
+            empty.classList.add('hidden');
+            count.textContent = vendors.length + '개 공급업체';
+
+            vendors.forEach(s => {
+                const initials = s.business_name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+                const avatar = s.avatar_url
+                    ? '<img src="' + s.avatar_url + '" class="w-full h-full object-cover" alt="">'
+                    : '<span class="font-bold text-lg">' + initials + '</span>';
+                const cats = (s.categories || []).slice(0, 3);
+                const verified = s.verified ? '<span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings:\'FILL\' 1">verified</span>' : '';
+
+                const card = document.createElement('div');
+                card.className = 'vendor-card';
+                card.dataset.country = s.country || '';
+                card.dataset.name = s.business_name.toLowerCase();
+                card.onclick = () => location.href = 'supplyprofile.html?id=' + s.id;
+                card.innerHTML =
+                    '<div class="flex items-center gap-4 mb-4">' +
+                        '<div class="w-14 h-14 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden flex-shrink-0">' + avatar + '</div>' +
+                        '<div class="flex-1 min-w-0">' +
+                            '<div class="flex items-center gap-1">' +
+                                '<span class="font-display text-title-md font-bold truncate">' + s.business_name + '</span>' + verified +
+                            '</div>' +
+                            '<span class="text-secondary text-sm">' + (s.country || '-') + '</span>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="flex items-center gap-5 text-sm text-secondary mb-4">' +
+                        '<div class="flex items-center gap-1.5">' +
+                            '<span class="material-symbols-outlined text-[16px]">schedule</span>' +
+                            '<span>' + (s.response_time || '-') + '</span>' +
+                        '</div>' +
+                        '<div class="flex items-center gap-1.5">' +
+                            '<span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings:\'FILL\' 1">star</span>' +
+                            '<span class="font-semibold text-primary">' + (s.rating > 0 ? s.rating : '-') + '</span>' +
+                        '</div>' +
+                        '<div class="flex items-center gap-1.5">' +
+                            '<span class="material-symbols-outlined text-[16px]">group</span>' +
+                            '<span>' + (s.review_count || 0) + ' 리뷰</span>' +
+                        '</div>' +
+                    '</div>' +
+                    '<p class="text-sm text-secondary mb-4 line-clamp-2" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">' + (s.description || '등록된 소개가 없습니다.') + '</p>' +
+                    '<div class="flex items-center justify-between">' +
+                        '<div class="flex gap-2">' + cats.map(c => '<span class="text-xs px-2.5 py-1 bg-surface-container rounded-full">' + c + '</span>').join('') + '</div>' +
+                        '<button class="flex items-center gap-1 text-sm text-primary hover:underline" onclick="event.stopPropagation()"><span class="material-symbols-outlined text-[16px]">chat</span>메시지</button>' +
+                    '</div>';
+                grid.appendChild(card);
+            });
+        }
+
+        // Filter chips
+        document.querySelectorAll('.filter-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+                applyFilters();
+            });
+        });
+
+        // Search
+        document.getElementById('searchInput').addEventListener('input', () => applyFilters());
+
+        // Sort
+        document.getElementById('sortSelect').addEventListener('change', () => applyFilters());
+
+        function applyFilters() {
+            const country = document.querySelector('.filter-chip.active')?.dataset.filter || 'all';
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const sort = document.getElementById('sortSelect').value;
+
+            let filtered = allVendors.filter(v => {
+                if (country !== 'all' && v.country !== country) return false;
+                if (search && !v.business_name.toLowerCase().includes(search) && !(v.description || '').toLowerCase().includes(search)) return false;
+                return true;
+            });
+
+            if (sort === 'rating') filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+            else if (sort === 'reviews') filtered.sort((a, b) => (b.review_count || 0) - (a.review_count || 0));
+            else if (sort === 'newest') filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+            renderVendors(filtered);
+        }
+
+        loadVendors();
+    </script>
+</body>
+</html>

@@ -110,7 +110,7 @@
             const t = a.textContent.trim();
             if (t.includes('Figtree Club')) a.href = link('index.html');
             else if (t === '카테고리' || t === '브랜드') a.href = link('index.html') + '#inventory';
-            else if (t === '공급업체') a.href = link('supplyprofile.html');
+            else if (t === '공급업체') a.href = link('suppliers.html');
         });
         // 로그인/회원가입 버튼은 auth.js에서 처리
     }
