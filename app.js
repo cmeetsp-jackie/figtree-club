@@ -380,6 +380,108 @@
     function initBundle() {
         const product = { id: 'vintage-leather', name: '프리미엄 빈티지 가죽 자켓', price: 765000 };
 
+        // Load real bundle data if ?id= present
+        const bundleId = new URLSearchParams(location.search).get('id');
+        if (bundleId && typeof DB !== 'undefined') {
+            DB.getBundleById(bundleId).then(b => {
+                if (!b) return;
+                product.id = b.id;
+                product.name = b.name;
+                product.price = b.price;
+
+                // Update title
+                const titleEl = document.querySelector('h1');
+                if (titleEl) titleEl.textContent = b.name;
+
+                // Update price
+                const priceEl = document.querySelector('[class*="display-lg"][class*="text-primary"]');
+                if (priceEl && priceEl.closest('.flex.items-baseline')) {
+                    priceEl.textContent = '₩' + b.price.toLocaleString('ko-KR');
+                }
+                const perPiece = b.quantity > 0 ? Math.round(b.price / b.quantity) : 0;
+                const perPieceEl = priceEl?.closest('.flex')?.querySelector('[class*="body-lg"]');
+                if (perPieceEl) perPieceEl.textContent = '개당 ₩' + perPiece.toLocaleString('ko-KR');
+
+                // Update buy button
+                const buyBtn = [...document.querySelectorAll('button')].find(btn => btn.textContent.includes('지금 구매'));
+                if (buyBtn) buyBtn.innerHTML = '<span class="material-symbols-outlined">lock</span> 지금 구매 - ₩' + b.price.toLocaleString('ko-KR');
+
+                // Update main image
+                const mainImg = document.querySelector('[class*="aspect-"][class*="4"] img');
+                if (mainImg && b.photos && b.photos[0]) {
+                    mainImg.src = b.photos[0];
+                }
+
+                // Update thumbnail strip with real photos
+                const thumbGrid = document.querySelector('[class*="grid-cols-5"]');
+                if (thumbGrid && b.photos && b.photos.length > 0) {
+                    thumbGrid.innerHTML = '';
+                    b.photos.slice(0, 5).forEach((url, i) => {
+                        const div = document.createElement('div');
+                        div.className = 'aspect-square bg-surface-container border rounded-lg overflow-hidden cursor-pointer ' + (i === 0 ? 'border-2 border-primary opacity-100' : 'border-outline-variant opacity-70 hover:opacity-100 transition-opacity');
+                        div.innerHTML = '<img alt="Photo ' + (i+1) + '" class="w-full h-full object-cover" src="' + url + '">';
+                        div.addEventListener('click', () => {
+                            if (mainImg) mainImg.src = url;
+                            [...thumbGrid.children].forEach(t => { t.className = 'aspect-square bg-surface-container border border-outline-variant rounded-lg overflow-hidden cursor-pointer opacity-70 hover:opacity-100 transition-opacity'; });
+                            div.className = 'aspect-square bg-surface-container border-2 border-primary rounded-lg overflow-hidden cursor-pointer opacity-100';
+                        });
+                        thumbGrid.appendChild(div);
+                    });
+                    if (b.photos.length > 5) {
+                        const more = document.createElement('div');
+                        more.className = 'aspect-square bg-surface-container border border-outline-variant rounded-lg overflow-hidden flex items-center justify-center cursor-pointer hover:bg-surface-container-high transition-colors text-sm text-secondary';
+                        more.textContent = '+' + (b.photos.length - 5) + '개 더보기';
+                        thumbGrid.appendChild(more);
+                    }
+                }
+
+                // Update video if exists
+                if (b.videos && b.videos[0] && mainImg) {
+                    const videoBtn = document.createElement('button');
+                    videoBtn.className = 'absolute bottom-4 left-4 bg-surface/80 backdrop-blur-sm px-3 py-1.5 rounded-full border border-outline-variant flex items-center gap-1 text-sm font-semibold';
+                    videoBtn.innerHTML = '<span class="material-symbols-outlined text-[18px]">play_circle</span> 동영상 보기';
+                    mainImg.closest('.relative')?.appendChild(videoBtn);
+                }
+
+                // Update category & bundle ID
+                document.querySelectorAll('.flex.items-center.gap-4.text-body-sm span').forEach(el => {
+                    if (el.textContent.includes('VJ-')) el.innerHTML = '<span class="material-symbols-outlined text-[18px]">inventory_2</span> ' + (b.category || '');
+                });
+
+                // Update grade
+                const gradeTag = document.querySelector('[class*="bg-primary"][class*="uppercase"]');
+                if (gradeTag && b.grade) gradeTag.textContent = b.grade;
+
+                // Update key metrics
+                const metricEls = document.querySelectorAll('.grid.grid-cols-2 .p-4');
+                metricEls.forEach(el => {
+                    const label = el.querySelector('[class*="label-caps"]')?.textContent || '';
+                    const val = el.querySelector('[class*="title-md"]');
+                    if (!val) return;
+                    if (label.includes('상태') && b.grade) val.textContent = b.grade;
+                    if (label.includes('사이즈') && b.size_range) val.textContent = b.size_range;
+                    if (label.includes('배송')) val.textContent = b.dispatch_time || '24시간 이내';
+                    if (label.includes('위치') && b.sellers) val.textContent = b.sellers.country || '-';
+                });
+
+                // Update supplier info
+                if (b.sellers) {
+                    const supplierName = document.querySelector('.flex.items-center.justify-between h3');
+                    if (supplierName) supplierName.innerHTML = b.sellers.business_name + (b.sellers.verified ? ' <span class="material-symbols-outlined text-primary text-[16px]" style="font-variation-settings:\'FILL\' 1">verified</span>' : '');
+                    const supplierAvatar = document.querySelector('.w-12.h-12.rounded-full img');
+                    if (supplierAvatar && b.sellers.avatar_url) supplierAvatar.src = b.sellers.avatar_url;
+                    const profileLink = [...document.querySelectorAll('a')].find(a => a.textContent.includes('프로필 보기'));
+                    if (profileLink) profileLink.href = link('supplyprofile.html') + '?id=' + b.seller_id;
+                }
+
+                // Update description
+                const descSection = document.querySelector('.prose');
+                if (descSection && b.description) {
+                    descSection.innerHTML = '<p>' + b.description.replace(/\n/g, '</p><p>') + '</p>';
+                }
+            }).catch(e => console.error('Bundle load error:', e));
+        }
+
         // Gallery thumbnails
         const mainImgWrap = document.querySelector('[class*="aspect-"][class*="4"]');
         const mainImg = mainImgWrap?.querySelector('img');
