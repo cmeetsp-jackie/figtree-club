@@ -177,6 +177,49 @@
                         </div>
                     </div>
 
+                    <!-- Profile Edit -->
+                    <div class="bg-white border border-outline-variant rounded-xl p-5" id="profileCard">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-display font-bold">내 프로필</h3>
+                            <button onclick="toggleProfileEdit()" id="profileEditBtn" class="text-xs text-primary hover:underline">수정</button>
+                        </div>
+                        <div id="profileView">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center font-bold" id="profileAvatar">-</div>
+                                <div>
+                                    <p class="text-sm font-bold" id="profileName">-</p>
+                                    <p class="text-xs text-secondary" id="profileCountry">-</p>
+                                </div>
+                            </div>
+                            <p class="text-sm text-secondary mb-2" id="profileDesc">소개를 작성해주세요. 구매자에게 노출됩니다.</p>
+                            <div class="flex flex-wrap gap-1" id="profileCats"></div>
+                        </div>
+                        <form id="profileForm" class="hidden flex flex-col gap-3">
+                            <div>
+                                <label class="text-xs font-semibold mb-1 block">상호명</label>
+                                <input id="editName" class="w-full border border-outline-variant rounded-lg px-3 py-2 text-sm focus:border-primary focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="text-xs font-semibold mb-1 block">소개 (구매자에게 표시됨)</label>
+                                <textarea id="editDesc" rows="3" class="w-full border border-outline-variant rounded-lg px-3 py-2 text-sm resize-none focus:border-primary focus:outline-none" placeholder="예: 프리미엄 빈티지 의류 전문. 랄프 로렌, 나이키 등 브랜드 번들 공급."></textarea>
+                            </div>
+                            <div>
+                                <label class="text-xs font-semibold mb-1 block">국가</label>
+                                <select id="editCountry" class="w-full border border-outline-variant rounded-lg px-3 py-2 text-sm bg-white focus:border-primary focus:outline-none">
+                                    <option>한국</option><option>일본</option><option>태국</option><option>홍콩</option><option>대만</option><option>싱가포르</option><option>영국</option><option>기타</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-xs font-semibold mb-1 block">취급 품목 (쉼표로 구분)</label>
+                                <input id="editCats" class="w-full border border-outline-variant rounded-lg px-3 py-2 text-sm focus:border-primary focus:outline-none" placeholder="예: 빈티지, 스포츠웨어, 데님">
+                            </div>
+                            <div class="flex gap-2">
+                                <button type="button" onclick="toggleProfileEdit()" class="flex-1 py-2 border border-outline-variant rounded-lg text-sm hover:bg-surface-container-low">취소</button>
+                                <button type="submit" class="flex-1 py-2 bg-primary text-on-primary rounded-lg text-sm font-semibold hover:bg-primary/90">저장</button>
+                            </div>
+                        </form>
+                    </div>
+
                     <!-- Seller Tips -->
                     <div class="bg-primary text-on-primary rounded-xl p-5">
                         <h3 class="font-display font-bold mb-3 flex items-center gap-2">
@@ -257,6 +300,46 @@
             const greeting = document.querySelector('header p');
             if (greeting) greeting.textContent = '안녕하세요, ' + seller.business_name + '님';
 
+            // Profile card
+            const initials = seller.business_name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+            document.getElementById('profileAvatar').textContent = initials;
+            document.getElementById('profileName').textContent = seller.business_name;
+            document.getElementById('profileCountry').textContent = seller.country || '-';
+            document.getElementById('profileDesc').textContent = seller.description || '소개를 작성해주세요. 구매자에게 노출됩니다.';
+            const catsEl = document.getElementById('profileCats');
+            (seller.categories || []).forEach(c => {
+                catsEl.innerHTML += '<span class="text-xs px-2 py-1 bg-surface-container-high rounded-full">' + c + '</span>';
+            });
+
+            // Profile edit form
+            window._seller = seller;
+            document.getElementById('profileForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = e.target.querySelector('button[type="submit"]');
+                btn.disabled = true; btn.textContent = '저장 중...';
+                try {
+                    const updates = {
+                        business_name: document.getElementById('editName').value.trim(),
+                        description: document.getElementById('editDesc').value.trim(),
+                        country: document.getElementById('editCountry').value,
+                        categories: document.getElementById('editCats').value.split(',').map(s => s.trim()).filter(Boolean)
+                    };
+                    await db.from('sellers').update(updates).eq('id', seller.id);
+                    Object.assign(seller, updates);
+                    // Update display
+                    document.getElementById('profileName').textContent = updates.business_name;
+                    document.getElementById('profileCountry').textContent = updates.country;
+                    document.getElementById('profileDesc').textContent = updates.description || '소개를 작성해주세요.';
+                    catsEl.innerHTML = '';
+                    updates.categories.forEach(c => { catsEl.innerHTML += '<span class="text-xs px-2 py-1 bg-surface-container-high rounded-full">' + c + '</span>'; });
+                    document.getElementById('profileAvatar').textContent = updates.business_name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+                    if (greeting) greeting.textContent = '안녕하세요, ' + updates.business_name + '님';
+                    toggleProfileEdit();
+                    alert('프로필이 저장되었습니다!');
+                } catch (err) { alert('저장 실패: ' + err.message); }
+                btn.disabled = false; btn.textContent = '저장';
+            });
+
             // Fetch stats
             try {
                 const stats = await DB.getSellerStats(seller.id);
@@ -306,6 +389,27 @@
                 }
             } catch (e) { console.error('Orders error:', e); }
         })();
+
+        function toggleProfileEdit() {
+            const view = document.getElementById('profileView');
+            const form = document.getElementById('profileForm');
+            const btn = document.getElementById('profileEditBtn');
+            const isEditing = !form.classList.contains('hidden');
+            if (isEditing) {
+                form.classList.add('hidden');
+                view.classList.remove('hidden');
+                btn.textContent = '수정';
+            } else {
+                const s = window._seller || {};
+                document.getElementById('editName').value = s.business_name || '';
+                document.getElementById('editDesc').value = s.description || '';
+                document.getElementById('editCountry').value = s.country || '한국';
+                document.getElementById('editCats').value = (s.categories || []).join(', ');
+                form.classList.remove('hidden');
+                view.classList.add('hidden');
+                btn.textContent = '취소';
+            }
+        }
     </script>
 </body>
 </html>

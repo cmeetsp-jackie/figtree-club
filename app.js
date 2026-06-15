@@ -285,6 +285,35 @@
         const cta = document.querySelector('a[href="#inventory"]');
         if (cta) cta.addEventListener('click', (e) => { e.preventDefault(); document.getElementById('inventory')?.scrollIntoView({ behavior: 'smooth' }); });
 
+        // Load vendors from DB
+        if (typeof DB !== 'undefined') {
+            db.from('sellers').select('*').order('rating', { ascending: false }).limit(10).then(({ data }) => {
+                const carousel = document.getElementById('vendorCarousel');
+                if (!carousel || !data || data.length === 0) return;
+                data.forEach(s => {
+                    const initials = s.business_name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+                    const cats = (s.categories || []).slice(0, 3);
+                    const card = document.createElement('div');
+                    card.className = 'vendor-card';
+                    card.onclick = () => location.href = link('supplyprofile.html') + '?id=' + s.id;
+                    card.innerHTML =
+                        '<div class="flex items-center gap-3 mb-4">' +
+                        '<div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center font-bold text-lg">' + initials + '</div>' +
+                        '<div><div class="flex items-center gap-1">' +
+                        '<span class="font-title-md text-title-md font-bold">' + s.business_name + '</span>' +
+                        (s.verified ? '<span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings:\'FILL\' 1">verified</span>' : '') +
+                        '</div><span class="text-secondary text-sm">' + (s.country || '') + '</span></div></div>' +
+                        '<div class="flex items-center gap-4 text-sm text-secondary mb-3">' +
+                        '<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings:\'FILL\' 1">star</span> ' + (s.rating || '0') + '</span>' +
+                        '<span>' + (s.review_count || 0) + ' 리뷰</span>' +
+                        '<span>' + (s.response_time || '-') + '</span></div>' +
+                        '<p class="text-sm text-secondary mb-3">' + (s.description || '등록된 소개가 없습니다.') + '</p>' +
+                        '<div class="flex gap-2">' + cats.map(c => '<span class="text-xs px-2 py-1 bg-surface-container-low rounded-full">' + c + '</span>').join('') + '</div>';
+                    carousel.appendChild(card);
+                });
+            }).catch(e => console.log('Vendor fetch:', e));
+        }
+
         // Category chips
         document.querySelectorAll('.cat-chip').forEach(chip => {
             chip.addEventListener('click', (e) => {
