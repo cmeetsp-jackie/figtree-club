@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>판매자 로그인 - Figtree Club</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Manrope:wght@600;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#000000", "on-primary": "#ffffff", "secondary": "#5e5e5e",
+                        "surface": "#fcf9f8", "surface-container-low": "#f6f3f2",
+                        "surface-container-high": "#eae7e7", "outline-variant": "#cfc4c5",
+                        "on-surface": "#1c1b1b", "on-surface-variant": "#4c4546",
+                        "error": "#ba1a1a", "background": "#fcf9f8"
+                    },
+                    fontFamily: { "display": ["Manrope"], "body": ["Inter"] }
+                }
+            }
+        }
+    </script>
+    <style>
+        .ghost-input { border: 1px solid #E5E5E5; transition: border-color 0.2s; }
+        .ghost-input:focus { border-color: #000; outline: none; box-shadow: none; }
+    </style>
+</head>
+<body class="bg-background min-h-screen flex items-center justify-center px-4">
+    <div class="w-full max-w-md">
+        <!-- Logo -->
+        <div class="text-center mb-10">
+            <h1 class="font-display text-3xl font-black tracking-tighter mb-2">Figtree Club</h1>
+            <div class="inline-flex items-center gap-2 bg-primary text-on-primary px-4 py-1.5 rounded-full text-sm font-semibold">
+                <span class="material-symbols-outlined text-[18px]">storefront</span>
+                판매자 센터
+            </div>
+        </div>
+
+        <!-- Login Card -->
+        <div class="bg-white border border-outline-variant rounded-xl p-8">
+            <h2 class="font-display text-xl font-bold mb-1">판매자 로그인</h2>
+            <p class="text-secondary text-sm mb-6">재고를 관리하고 주문을 처리하세요.</p>
+
+            <form id="loginForm" class="flex flex-col gap-4">
+                <div>
+                    <label class="block text-sm font-semibold mb-1.5">이메일</label>
+                    <input type="email" class="w-full ghost-input rounded-lg px-4 py-3 text-sm" placeholder="seller@example.com" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-1.5">비밀번호</label>
+                    <input type="password" class="w-full ghost-input rounded-lg px-4 py-3 text-sm" placeholder="비밀번호 입력" required>
+                </div>
+                <div class="flex justify-between items-center text-sm">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" class="rounded border-outline-variant">
+                        <span class="text-secondary">로그인 유지</span>
+                    </label>
+                    <a href="#" class="text-primary hover:underline">비밀번호 찾기</a>
+                </div>
+                <button type="submit" class="w-full py-3.5 bg-primary text-on-primary rounded-lg font-semibold text-sm hover:bg-primary/90 transition-colors mt-2">
+                    로그인
+                </button>
+            </form>
+
+            <div class="mt-6 pt-6 border-t border-outline-variant text-center">
+                <p class="text-sm text-secondary mb-3">아직 판매자 계정이 없으신가요?</p>
+                <a href="signup.html" class="inline-block w-full py-3.5 border border-primary text-primary rounded-lg font-semibold text-sm hover:bg-surface-container-low transition-colors text-center">
+                    판매자로 가입하기
+                </a>
+            </div>
+        </div>
+
+        <p class="text-center text-xs text-secondary mt-6">
+            구매자이신가요? <a href="../index.html" class="text-primary hover:underline">마켓플레이스로 이동</a>
+        </p>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>

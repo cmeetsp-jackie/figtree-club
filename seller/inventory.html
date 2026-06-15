@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>재고 관리 - Figtree Club 판매자</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Manrope:wght@600;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: { extend: {
+                colors: {
+                    "primary": "#000000", "on-primary": "#ffffff", "secondary": "#5e5e5e",
+                    "surface": "#fcf9f8", "surface-container-low": "#f6f3f2",
+                    "surface-container-high": "#eae7e7", "surface-container": "#f0eded",
+                    "outline-variant": "#cfc4c5", "on-surface": "#1c1b1b",
+                    "error": "#ba1a1a", "background": "#fcf9f8", "success": "#1a7d37"
+                },
+                fontFamily: { "display": ["Manrope"], "body": ["Inter"] }
+            }}
+        }
+    </script>
+    <style>
+        .sidebar-link { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-radius: 8px; font-size: 14px; font-weight: 500; color: #5e5e5e; transition: all 0.2s; }
+        .sidebar-link:hover { background: #f6f3f2; color: #1c1b1b; }
+        .sidebar-link.active { background: #1b1b1b; color: #fff; }
+        .sidebar-link.active .material-symbols-outlined { color: #fff; }
+        .ghost-input { border: 1px solid #E5E5E5; transition: border-color 0.2s; }
+        .ghost-input:focus { border-color: #000; outline: none; box-shadow: none; }
+        .upload-zone { border: 2px dashed #cfc4c5; border-radius: 12px; padding: 40px; text-align: center; cursor: pointer; transition: all 0.2s; }
+        .upload-zone:hover { border-color: #000; background: #f6f3f2; }
+        .upload-zone.dragover { border-color: #000; background: #eae7e7; }
+        .mobile-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 1px solid #cfc4c5; z-index: 50; padding: 6px 0 env(safe-area-inset-bottom, 6px); }
+        .mobile-nav a { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 10px; color: #5e5e5e; padding: 6px 0; flex: 1; text-decoration: none; }
+        .mobile-nav a.active { color: #000; }
+        .mobile-nav a .material-symbols-outlined { font-size: 22px; }
+        @media (max-width: 767px) { .mobile-nav { display: flex; } main { padding-bottom: 80px !important; } }
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; display: none; align-items: center; justify-content: center; }
+        .modal-overlay.show { display: flex; }
+        .preview-thumb { width: 80px; height: 80px; border-radius: 8px; object-fit: cover; border: 1px solid #e5e5e5; }
+    </style>
+</head>
+<body class="bg-background min-h-screen flex">
+    <!-- Sidebar -->
+    <aside class="w-[260px] bg-white border-r border-outline-variant h-screen sticky top-0 flex flex-col p-4 hidden md:flex">
+        <div class="mb-8 px-2">
+            <h1 class="font-display text-xl font-black tracking-tighter">Figtree Club</h1>
+            <span class="text-xs font-semibold text-secondary bg-surface-container-high px-2 py-0.5 rounded-full">판매자 센터</span>
+        </div>
+        <nav class="flex flex-col gap-1 flex-1">
+            <a href="index.html" class="sidebar-link"><span class="material-symbols-outlined text-[20px]">dashboard</span> 대시보드</a>
+            <a href="inventory.html" class="sidebar-link active"><span class="material-symbols-outlined text-[20px]">inventory_2</span> 재고 관리</a>
+            <a href="orders.html" class="sidebar-link"><span class="material-symbols-outlined text-[20px]">shopping_bag</span> 주문 관리</a>
+            <a href="messages.html" class="sidebar-link"><span class="material-symbols-outlined text-[20px]">chat</span> 메시지</a>
+            <a href="#" class="sidebar-link"><span class="material-symbols-outlined text-[20px]">bar_chart</span> 분석</a>
+            <a href="#" class="sidebar-link"><span class="material-symbols-outlined text-[20px]">settings</span> 설정</a>
+        </nav>
+        <div class="border-t border-outline-variant pt-4 mt-4">
+            <a href="login.html" class="sidebar-link text-error">
+                <span class="material-symbols-outlined text-[20px]">logout</span> 로그아웃
+            </a>
+        </div>
+    </aside>
+
+    <div class="flex-1 flex flex-col min-h-screen">
+        <!-- Top Bar -->
+        <header class="bg-white border-b border-outline-variant px-6 py-4 flex items-center justify-between sticky top-0 z-10">
+            <div>
+                <h2 class="font-display text-xl font-bold">재고 관리</h2>
+                <p class="text-sm text-secondary">번들을 등록하고 재고를 관리하세요</p>
+            </div>
+            <button onclick="document.getElementById('newBundleModal').classList.add('show')" class="bg-primary text-on-primary px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary/90 transition-colors flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[18px]">add</span> 새 번들 등록
+            </button>
+        </header>
+
+        <main class="flex-1 p-6">
+            <!-- Filter Bar -->
+            <div class="flex flex-wrap gap-3 mb-6">
+                <div class="relative flex-1 min-w-[200px] max-w-md">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary text-[20px]">search</span>
+                    <input class="w-full ghost-input rounded-lg pl-10 pr-4 py-2.5 text-sm" placeholder="번들 이름 검색...">
+                </div>
+                <select class="ghost-input rounded-lg px-4 py-2.5 text-sm bg-white">
+                    <option>전체 상태</option>
+                    <option>판매 중</option>
+                    <option>품절</option>
+                    <option>임시저장</option>
+                </select>
+                <select class="ghost-input rounded-lg px-4 py-2.5 text-sm bg-white">
+                    <option>전체 카테고리</option>
+                    <option>자켓 & 아우터</option>
+                    <option>폴로 & 셔츠</option>
+                    <option>후디 & 스웨트</option>
+                    <option>데님</option>
+                    <option>반바지</option>
+                    <option>스포츠웨어</option>
+                    <option>니트웨어</option>
+                </select>
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="bg-white border border-outline-variant rounded-xl">
+                <div class="py-20 px-8 text-center">
+                    <span class="material-symbols-outlined text-[64px] text-secondary mb-4 block">inventory_2</span>
+                    <h3 class="font-display text-xl font-bold mb-2">아직 등록된 번들이 없습니다</h3>
+                    <p class="text-sm text-secondary mb-6 max-w-md mx-auto">첫 번째 번들을 등록해서 구매자들에게 상품을 보여주세요. 사진, 가격, 등급 정보를 입력하면 바로 판매가 시작됩니다.</p>
+                    <button onclick="document.getElementById('newBundleModal').classList.add('show')" class="inline-flex items-center gap-1.5 bg-primary text-on-primary px-6 py-3 rounded-lg text-sm font-semibold hover:bg-primary/90 transition-colors">
+                        <span class="material-symbols-outlined text-[18px]">add_box</span> 첫 번들 등록하기
+                    </button>
+                </div>
+            </div>
+
+            <!-- Inventory Table (hidden until items exist) -->
+            <div id="inventoryTable" class="bg-white border border-outline-variant rounded-xl overflow-hidden hidden">
+                <table class="w-full">
+                    <thead class="bg-surface-container-low border-b border-outline-variant">
+                        <tr>
+                            <th class="text-left px-5 py-3 text-xs font-semibold text-secondary uppercase tracking-wider">상품</th>
+                            <th class="text-left px-5 py-3 text-xs font-semibold text-secondary uppercase tracking-wider hidden md:table-cell">카테고리</th>
+                            <th class="text-right px-5 py-3 text-xs font-semibold text-secondary uppercase tracking-wider">가격</th>
+                            <th class="text-center px-5 py-3 text-xs font-semibold text-secondary uppercase tracking-wider hidden md:table-cell">수량</th>
+                            <th class="text-center px-5 py-3 text-xs font-semibold text-secondary uppercase tracking-wider">상태</th>
+                            <th class="text-center px-5 py-3 text-xs font-semibold text-secondary uppercase tracking-wider hidden md:table-cell">조회</th>
+                            <th class="text-right px-5 py-3 text-xs font-semibold text-secondary uppercase tracking-wider"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventoryBody" class="divide-y divide-outline-variant">
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- New Bundle Modal -->
+    <div class="modal-overlay" id="newBundleModal">
+        <div class="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto mx-4">
+            <div class="flex justify-between items-center p-6 border-b border-outline-variant sticky top-0 bg-white z-10">
+                <h2 class="font-display text-xl font-bold">새 번들 등록</h2>
+                <button onclick="document.getElementById('newBundleModal').classList.remove('show')" class="text-secondary hover:text-primary">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <form id="bundleForm" class="p-6 flex flex-col gap-5">
+                <!-- Photos & Video -->
+                <div>
+                    <label class="block text-sm font-semibold mb-2">상품 사진 & 동영상 <span class="text-error">*</span></label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div class="upload-zone" id="uploadZone">
+                            <input type="file" id="photoInput" accept="image/*" multiple class="hidden">
+                            <span class="material-symbols-outlined text-[36px] text-secondary mb-2 block">add_photo_alternate</span>
+                            <p class="text-sm font-semibold">사진 업로드</p>
+                            <p class="text-xs text-secondary mt-1">최대 10장, JPG/PNG, 각 5MB</p>
+                        </div>
+                        <div class="upload-zone" id="videoUploadZone">
+                            <input type="file" id="videoInput" accept="video/*" class="hidden">
+                            <span class="material-symbols-outlined text-[36px] text-secondary mb-2 block">videocam</span>
+                            <p class="text-sm font-semibold">동영상 업로드</p>
+                            <p class="text-xs text-secondary mt-1">최대 2개, MP4/MOV, 각 50MB</p>
+                        </div>
+                    </div>
+                    <div id="photoPreview" class="flex gap-2 mt-3 flex-wrap"></div>
+                    <div id="videoPreview" class="flex gap-2 mt-2 flex-wrap"></div>
+                </div>
+
+                <!-- Media Guide -->
+                <div class="bg-surface-container-low border border-outline-variant rounded-xl p-4">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="material-symbols-outlined text-[20px] text-primary">tips_and_updates</span>
+                        <span class="text-sm font-bold">촬영 가이드라인</span>
+                    </div>
+
+                    <!-- Example Video -->
+                    <div class="mb-4">
+                        <p class="text-xs font-semibold mb-2 flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[14px]">play_circle</span> 이렇게 촬영하세요 (예시)
+                        </p>
+                        <div class="rounded-lg overflow-hidden border border-outline-variant bg-black" style="max-width:360px">
+                            <video id="exampleVideo" controls playsinline muted
+                                style="width:100%;display:block;aspect-ratio:9/16;max-height:400px;object-fit:contain;background:#000"
+                                poster="">
+                            </video>
+                            <div class="bg-white px-3 py-2">
+                                <p class="text-[11px] text-secondary">실제 도매 공급업체의 번들 촬영 예시 — 바닥에 깔아놓고 한 벌씩 보여주는 방식</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-xs font-semibold mb-2 flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[14px]">photo_camera</span> 사진 촬영 팁
+                            </p>
+                            <ul class="text-xs text-secondary space-y-1.5">
+                                <li class="flex items-start gap-1.5">
+                                    <span class="text-primary mt-0.5">1.</span>
+                                    전체 번들을 바닥에 깔아놓고 위에서 촬영 (전체샷)
+                                </li>
+                                <li class="flex items-start gap-1.5">
+                                    <span class="text-primary mt-0.5">2.</span>
+                                    개별 아이템 앞면/뒷면 클로즈업
+                                </li>
+                                <li class="flex items-start gap-1.5">
+                                    <span class="text-primary mt-0.5">3.</span>
+                                    라벨, 태그, 브랜드 로고 클로즈업
+                                </li>
+                                <li class="flex items-start gap-1.5">
+                                    <span class="text-primary mt-0.5">4.</span>
+                                    흠집이나 결함 부분 정직하게 촬영
+                                </li>
+                                <li class="flex items-start gap-1.5">
+                                    <span class="text-primary mt-0.5">5.</span>
+                                    자연광 또는 밝은 조명, 깔끔한 배경 사용
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p class="text-xs font-semibold mb-2 flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[14px]">videocam</span> 동영상 촬영 팁
+                            </p>
+                            <ul class="text-xs text-secondary space-y-1.5">
+                                <li class="flex items-start gap-1.5">
+                                    <span class="text-primary mt-0.5">1.</span>
+                                    번들 전체를 바닥에 펼쳐놓고 천천히 훑어가며 촬영 (30초~1분)
+                                </li>
+                                <li class="flex items-start gap-1.5">
+                                    <span class="text-primary mt-0.5">2.</span>
+                                    각 아이템을 하나씩 들어올리며 앞뒤 보여주기
+                                </li>
+                                <li class="flex items-start gap-1.5">
+                                    <span class="text-primary mt-0.5">3.</span>
+                                    소재 질감이 보이도록 가까이 촬영
+                                </li>
+                                <li class="flex items-start gap-1.5">
+                                    <span class="text-primary mt-0.5">4.</span>
+                                    세로 촬영 권장 (모바일 구매자가 많음)
+                                </li>
+                                <li class="flex items-start gap-1.5">
+                                    <span class="text-primary mt-0.5">5.</span>
+                                    <span class="font-semibold text-primary">동영상이 있으면 판매 전환율이 2배 높아집니다</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- Basic Info -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="col-span-2">
+                        <label class="block text-sm font-semibold mb-1.5">번들 이름 <span class="text-error">*</span></label>
+                        <input id="bundleName" class="w-full ghost-input rounded-lg px-4 py-3 text-sm" placeholder="예: 빈티지 나이키 윈드브레이커 번들" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-1.5">카테고리 <span class="text-error">*</span></label>
+                        <select id="bundleCategory" class="w-full ghost-input rounded-lg px-4 py-3 text-sm bg-white" required>
+                            <option value="">카테고리 선택</option>
+                            <option>자켓 & 아우터</option>
+                            <option>폴로 & 셔츠</option>
+                            <option>후디 & 스웨트</option>
+                            <option>데님</option>
+                            <option>반바지</option>
+                            <option>스포츠웨어</option>
+                            <option>니트웨어</option>
+                            <option>티셔츠</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-1.5">브랜드</label>
+                        <input id="bundleBrand" class="w-full ghost-input rounded-lg px-4 py-3 text-sm" placeholder="예: Nike, Adidas, 혼합">
+                    </div>
+                </div>
+                <!-- Pricing -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold mb-1.5">총 가격 (₩) <span class="text-error">*</span></label>
+                        <input id="bundlePrice" type="number" class="w-full ghost-input rounded-lg px-4 py-3 text-sm" placeholder="765000" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-1.5">수량 (벌) <span class="text-error">*</span></label>
+                        <input id="bundleQty" type="number" class="w-full ghost-input rounded-lg px-4 py-3 text-sm" placeholder="10" required>
+                    </div>
+                </div>
+                <div id="perPieceInfo" class="text-sm text-secondary bg-surface-container-low px-4 py-2 rounded-lg hidden">
+                    개당 가격: <span id="perPiecePrice" class="font-bold text-primary"></span>
+                </div>
+                <!-- Grade & Size -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold mb-1.5">등급 <span class="text-error">*</span></label>
+                        <select id="bundleGrade" class="w-full ghost-input rounded-lg px-4 py-3 text-sm bg-white" required>
+                            <option value="">등급 선택</option>
+                            <option>A (우수)</option>
+                            <option>AB (우수-양호)</option>
+                            <option>B (양호)</option>
+                            <option>BC (양호-보통)</option>
+                            <option>C (보통)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-1.5">사이즈 범위</label>
+                        <input id="bundleSize" class="w-full ghost-input rounded-lg px-4 py-3 text-sm" placeholder="예: M-XL 혼합">
+                    </div>
+                </div>
+                <!-- Description -->
+                <div>
+                    <label class="block text-sm font-semibold mb-1.5">상세 설명</label>
+                    <textarea id="bundleDesc" class="w-full ghost-input rounded-lg px-4 py-3 text-sm h-28 resize-none" placeholder="번들에 포함된 상품, 상태, 브랜드, 색상 등을 자세히 설명해주세요. 구체적인 설명이 판매 전환율을 높입니다."></textarea>
+                </div>
+                <!-- Shipping -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold mb-1.5">발송 소요 시간</label>
+                        <select id="bundleDispatch" class="w-full ghost-input rounded-lg px-4 py-3 text-sm bg-white">
+                            <option>24시간 이내</option>
+                            <option>1-2일</option>
+                            <option>3-5일</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-1.5">무게 (kg)</label>
+                        <input id="bundleWeight" type="number" step="0.1" class="w-full ghost-input rounded-lg px-4 py-3 text-sm" placeholder="예: 12">
+                    </div>
+                </div>
+            </form>
+            <div class="flex gap-3 p-6 border-t border-outline-variant sticky bottom-0 bg-white">
+                <button onclick="saveDraft()" class="flex-1 py-3 border border-outline-variant rounded-lg text-sm font-semibold hover:bg-surface-container-low transition-colors">임시저장</button>
+                <button onclick="publishBundle()" class="flex-1 py-3 bg-primary text-on-primary rounded-lg text-sm font-semibold hover:bg-primary/90 transition-colors">번들 등록하기</button>
+            </div>
+        </div>
+    </div>
+
+    <nav class="mobile-nav">
+        <a href="index.html"><span class="material-symbols-outlined">dashboard</span><span>대시보드</span></a>
+        <a href="inventory.html" class="active"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">inventory_2</span><span>재고</span></a>
+        <a href="orders.html"><span class="material-symbols-outlined">shopping_bag</span><span>주문</span></a>
+        <a href="messages.html"><span class="material-symbols-outlined">chat</span><span>메시지</span></a>
+        <a href="#"><span class="material-symbols-outlined">settings</span><span>설정</span></a>
+    </nav>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script>
+        // Example video (HLS stream from real supplier)
+        (function() {
+            const video = document.getElementById('exampleVideo');
+            const src = 'https://d3j4cclbjn29bj.cloudfront.net/9219561521390/fc47c5fa-ddd7-4506-a0a7-cde1473c3c30/fc47c5fa-ddd7-4506-a0a7-cde1473c3c30_playlist.m3u8';
+            if (video) {
+                if (Hls.isSupported()) {
+                    var hls = new Hls();
+                    hls.loadSource(src);
+                    hls.attachMedia(video);
+                } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                    video.src = src;
+                }
+            }
+        })();
+
+        // Photo upload
+        const uploadZone = document.getElementById('uploadZone');
+        const photoInput = document.getElementById('photoInput');
+        const photoPreview = document.getElementById('photoPreview');
+        let uploadedFiles = [];
+
+        uploadZone.addEventListener('click', () => photoInput.click());
+        uploadZone.addEventListener('dragover', (e) => { e.preventDefault(); uploadZone.classList.add('dragover'); });
+        uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+        photoInput.addEventListener('change', (e) => handleFiles(e.target.files));
+
+        function handleFiles(files) {
+            Array.from(files).forEach(file => {
+                if (!file.type.startsWith('image/') || uploadedFiles.length >= 10) return;
+                uploadedFiles.push(file);
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const wrap = document.createElement('div');
+                    wrap.className = 'relative';
+                    wrap.innerHTML = '<img src="' + e.target.result + '" class="preview-thumb"><button onclick="this.parentElement.remove()" class="absolute -top-2 -right-2 w-5 h-5 bg-error text-white rounded-full flex items-center justify-center text-xs">&times;</button>';
+                    photoPreview.appendChild(wrap);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Video upload
+        const videoUploadZone = document.getElementById('videoUploadZone');
+        const videoInput = document.getElementById('videoInput');
+        const videoPreview = document.getElementById('videoPreview');
+        let uploadedVideos = [];
+
+        videoUploadZone.addEventListener('click', () => videoInput.click());
+        videoUploadZone.addEventListener('dragover', (e) => { e.preventDefault(); videoUploadZone.classList.add('dragover'); });
+        videoUploadZone.addEventListener('dragleave', () => videoUploadZone.classList.remove('dragover'));
+        videoUploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            videoUploadZone.classList.remove('dragover');
+            handleVideoFiles(e.dataTransfer.files);
+        });
+        videoInput.addEventListener('change', (e) => handleVideoFiles(e.target.files));
+
+        function handleVideoFiles(files) {
+            Array.from(files).forEach(file => {
+                if (!file.type.startsWith('video/') || uploadedVideos.length >= 2) return;
+                if (file.size > 50 * 1024 * 1024) { alert('동영상 파일은 50MB 이하만 업로드 가능합니다.'); return; }
+                uploadedVideos.push(file);
+                const url = URL.createObjectURL(file);
+                const wrap = document.createElement('div');
+                wrap.className = 'relative';
+                const sizeMB = (file.size / 1024 / 1024).toFixed(1);
+                wrap.innerHTML =
+                    '<div class="preview-thumb flex flex-col items-center justify-center bg-surface-container-high gap-1" style="width:120px;height:80px">' +
+                    '<span class="material-symbols-outlined text-[20px] text-primary">videocam</span>' +
+                    '<span class="text-[10px] text-secondary truncate max-w-[100px]">' + file.name + '</span>' +
+                    '<span class="text-[10px] text-secondary">' + sizeMB + 'MB</span>' +
+                    '</div>' +
+                    '<button onclick="this.parentElement.remove()" class="absolute -top-2 -right-2 w-5 h-5 bg-error text-white rounded-full flex items-center justify-center text-xs">&times;</button>';
+                videoPreview.appendChild(wrap);
+            });
+        }
+
+        // Per-piece price calculator
+        const priceInput = document.getElementById('bundlePrice');
+        const qtyInput = document.getElementById('bundleQty');
+        const perPieceInfo = document.getElementById('perPieceInfo');
+        const perPiecePrice = document.getElementById('perPiecePrice');
+
+        function calcPerPiece() {
+            const price = parseInt(priceInput.value) || 0;
+            const qty = parseInt(qtyInput.value) || 0;
+            if (price > 0 && qty > 0) {
+                perPieceInfo.classList.remove('hidden');
+                perPiecePrice.textContent = '₩' + Math.round(price / qty).toLocaleString('ko-KR');
+            } else {
+                perPieceInfo.classList.add('hidden');
+            }
+        }
+        priceInput.addEventListener('input', calcPerPiece);
+        qtyInput.addEventListener('input', calcPerPiece);
+
+        // Save / Publish
+        function saveDraft() {
+            const name = document.getElementById('bundleName').value.trim();
+            if (!name) { alert('번들 이름을 입력해주세요.'); return; }
+            addToTable(name, 'draft');
+            document.getElementById('newBundleModal').classList.remove('show');
+            document.getElementById('bundleForm').reset();
+            photoPreview.innerHTML = '';
+            perPieceInfo.classList.add('hidden');
+        }
+
+        function publishBundle() {
+            const name = document.getElementById('bundleName').value.trim();
+            const category = document.getElementById('bundleCategory').value;
+            const price = document.getElementById('bundlePrice').value;
+            const qty = document.getElementById('bundleQty').value;
+            const grade = document.getElementById('bundleGrade').value;
+
+            if (!name || !category || !price || !qty || !grade) {
+                alert('필수 항목(*)을 모두 입력해주세요.');
+                return;
+            }
+            addToTable(name, 'active');
+            document.getElementById('newBundleModal').classList.remove('show');
+            document.getElementById('bundleForm').reset();
+            photoPreview.innerHTML = '';
+            perPieceInfo.classList.add('hidden');
+        }
+
+        function addToTable(name, status) {
+            document.getElementById('emptyState').classList.add('hidden');
+            const table = document.getElementById('inventoryTable');
+            const tbody = document.getElementById('inventoryBody');
+            table.classList.remove('hidden');
+
+            const category = document.getElementById('bundleCategory').value || '-';
+            const price = parseInt(document.getElementById('bundlePrice').value) || 0;
+            const qty = parseInt(document.getElementById('bundleQty').value) || 0;
+            const perPiece = qty > 0 ? Math.round(price / qty) : 0;
+            const statusLabel = status === 'active'
+                ? '<span class="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full bg-green-100 text-green-800">판매 중</span>'
+                : '<span class="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full bg-gray-100 text-gray-600">임시저장</span>';
+
+            const row = document.createElement('tr');
+            row.className = 'hover:bg-surface-container-low transition-colors';
+            row.innerHTML =
+                '<td class="px-5 py-4"><div class="flex items-center gap-3">' +
+                '<div class="w-12 h-12 rounded-lg bg-surface-container-high overflow-hidden flex-shrink-0 flex items-center justify-center"><span class="material-symbols-outlined text-secondary">image</span></div>' +
+                '<div><p class="text-sm font-semibold">' + name + '</p><p class="text-xs text-secondary">방금 등록됨</p></div></div></td>' +
+                '<td class="px-5 py-4 text-sm text-secondary hidden md:table-cell">' + category + '</td>' +
+                '<td class="px-5 py-4 text-right"><p class="text-sm font-bold">' + (price > 0 ? '₩' + price.toLocaleString('ko-KR') : '미설정') + '</p>' +
+                (perPiece > 0 ? '<p class="text-xs text-secondary">₩' + perPiece.toLocaleString('ko-KR') + '/개</p>' : '') + '</td>' +
+                '<td class="px-5 py-4 text-center text-sm hidden md:table-cell">' + (qty > 0 ? qty + '벌' : '-') + '</td>' +
+                '<td class="px-5 py-4 text-center">' + statusLabel + '</td>' +
+                '<td class="px-5 py-4 text-center text-sm text-secondary hidden md:table-cell">0</td>' +
+                '<td class="px-5 py-4 text-right"><button class="text-secondary hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]">more_vert</span></button></td>';
+            tbody.prepend(row);
+        }
+
+        // Modal close on overlay click
+        document.getElementById('newBundleModal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) e.currentTarget.classList.remove('show');
+        });
+
+        // Auto-open modal if ?new=1
+        if (location.search.includes('new=1')) {
+            document.getElementById('newBundleModal').classList.add('show');
+        }
+    </script>
+</body>
+</html>

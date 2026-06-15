@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>메시지 - Figtree Club 판매자</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Manrope:wght@600;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: { extend: {
+                colors: {
+                    "primary": "#000000", "on-primary": "#ffffff", "secondary": "#5e5e5e",
+                    "surface": "#fcf9f8", "surface-container-low": "#f6f3f2",
+                    "surface-container-high": "#eae7e7", "surface-container": "#f0eded",
+                    "outline-variant": "#cfc4c5", "on-surface": "#1c1b1b",
+                    "error": "#ba1a1a", "background": "#fcf9f8", "success": "#1a7d37"
+                },
+                fontFamily: { "display": ["Manrope"], "body": ["Inter"] }
+            }}
+        }
+    </script>
+    <style>
+        .sidebar-link { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-radius: 8px; font-size: 14px; font-weight: 500; color: #5e5e5e; transition: all 0.2s; }
+        .sidebar-link:hover { background: #f6f3f2; color: #1c1b1b; }
+        .sidebar-link.active { background: #1b1b1b; color: #fff; }
+        .sidebar-link.active .material-symbols-outlined { color: #fff; }
+        .conv-item { padding: 16px; cursor: pointer; transition: background 0.15s; border-bottom: 1px solid #cfc4c5; }
+        .conv-item:hover { background: #f6f3f2; }
+        .conv-item.active { background: #eae7e7; }
+        .msg-bubble { max-width: 70%; padding: 10px 14px; border-radius: 12px; font-size: 14px; line-height: 1.6; }
+        .msg-bubble.incoming { background: #fff; border: 1px solid #e5e2e1; align-self: flex-start; border-bottom-left-radius: 4px; }
+        .msg-bubble.outgoing { background: #1b1b1b; color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
+        .mobile-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 1px solid #cfc4c5; z-index: 50; padding: 6px 0 env(safe-area-inset-bottom, 6px); }
+        .mobile-nav a { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 10px; color: #5e5e5e; padding: 6px 0; flex: 1; text-decoration: none; }
+        .mobile-nav a.active { color: #000; }
+        .mobile-nav a .material-symbols-outlined { font-size: 22px; }
+        @media (max-width: 767px) {
+            .mobile-nav { display: flex; }
+            .conv-item { padding: 12px; }
+            /* Messages: stack conversation list and chat */
+            .msg-layout { flex-direction: column; height: auto; min-height: calc(100vh - 60px); }
+            .msg-layout .conv-list { width: 100%; height: auto; max-height: none; border-right: none; border-bottom: 1px solid #cfc4c5; }
+            .msg-layout .conv-list .overflow-y-auto { max-height: 300px; }
+            .msg-layout .chat-area { flex: 1; min-height: 400px; padding-bottom: 70px; }
+            .msg-bubble { max-width: 85%; }
+        }
+    </style>
+</head>
+<body class="bg-background min-h-screen flex">
+    <!-- App Sidebar -->
+    <aside class="w-[260px] bg-white border-r border-outline-variant h-screen sticky top-0 flex flex-col p-4 hidden md:flex">
+        <div class="mb-8 px-2">
+            <h1 class="font-display text-xl font-black tracking-tighter">Figtree Club</h1>
+            <span class="text-xs font-semibold text-secondary bg-surface-container-high px-2 py-0.5 rounded-full">판매자 센터</span>
+        </div>
+        <nav class="flex flex-col gap-1 flex-1">
+            <a href="index.html" class="sidebar-link"><span class="material-symbols-outlined text-[20px]">dashboard</span> 대시보드</a>
+            <a href="inventory.html" class="sidebar-link"><span class="material-symbols-outlined text-[20px]">inventory_2</span> 재고 관리</a>
+            <a href="orders.html" class="sidebar-link"><span class="material-symbols-outlined text-[20px]">shopping_bag</span> 주문 관리</a>
+            <a href="messages.html" class="sidebar-link active">
+                <span class="material-symbols-outlined text-[20px]">chat</span> 메시지
+            </a>
+            <a href="#" class="sidebar-link"><span class="material-symbols-outlined text-[20px]">bar_chart</span> 분석</a>
+            <a href="#" class="sidebar-link"><span class="material-symbols-outlined text-[20px]">settings</span> 설정</a>
+        </nav>
+        <div class="border-t border-outline-variant pt-4 mt-4">
+            <a href="login.html" class="sidebar-link text-error">
+                <span class="material-symbols-outlined text-[20px]">logout</span> 로그아웃
+            </a>
+        </div>
+    </aside>
+
+    <!-- Messages Layout -->
+    <div class="flex-1 flex h-screen overflow-hidden msg-layout">
+        <!-- Conversation List -->
+        <div class="w-[340px] border-r border-outline-variant flex flex-col bg-white conv-list">
+            <div class="p-4 border-b border-outline-variant">
+                <h2 class="font-display text-lg font-bold mb-3">메시지</h2>
+                <div class="relative">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary text-[18px]">search</span>
+                    <input class="w-full border border-outline-variant rounded-lg pl-9 pr-4 py-2 text-sm focus:border-primary focus:outline-none" placeholder="대화 검색...">
+                </div>
+            </div>
+            <div class="flex-1 overflow-y-auto" id="convList">
+                <!-- Empty state for conversation list -->
+                <div id="convEmpty" class="py-16 px-6 text-center">
+                    <span class="material-symbols-outlined text-[40px] text-secondary mb-3 block">forum</span>
+                    <p class="text-sm font-semibold mb-1">아직 대화가 없습니다</p>
+                    <p class="text-xs text-secondary">구매자가 메시지를 보내면 여기에 표시됩니다.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Area -->
+        <div class="flex-1 flex flex-col bg-surface-container-low chat-area">
+            <!-- Empty chat state -->
+            <div id="chatEmpty" class="flex-1 flex flex-col items-center justify-center text-center px-8">
+                <span class="material-symbols-outlined text-[64px] text-secondary mb-4">chat_bubble_outline</span>
+                <h3 class="font-display text-xl font-bold mb-2">메시지를 시작하세요</h3>
+                <p class="text-sm text-secondary max-w-sm">구매자가 상품에 대해 문의하면 여기서 바로 대화할 수 있습니다. 빠른 응답은 판매 전환율을 높입니다.</p>
+                <div class="mt-6 flex flex-col gap-3 text-left bg-white border border-outline-variant rounded-xl p-5 max-w-sm w-full">
+                    <p class="text-xs font-semibold text-secondary uppercase tracking-wider">응답 시 팁</p>
+                    <div class="flex items-start gap-2 text-sm">
+                        <span class="material-symbols-outlined text-[16px] text-primary mt-0.5">schedule</span>
+                        <span>2시간 이내 응답하면 품질 점수가 올라갑니다</span>
+                    </div>
+                    <div class="flex items-start gap-2 text-sm">
+                        <span class="material-symbols-outlined text-[16px] text-primary mt-0.5">photo_camera</span>
+                        <span>추가 사진을 보내면 구매 확률이 높아집니다</span>
+                    </div>
+                    <div class="flex items-start gap-2 text-sm">
+                        <span class="material-symbols-outlined text-[16px] text-primary mt-0.5">handshake</span>
+                        <span>대량 주문 시 합리적인 할인을 제안해보세요</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active chat (hidden by default, shown when conversation selected) -->
+            <div id="chatActive" class="flex-1 flex flex-col hidden">
+                <!-- Chat Header -->
+                <div class="bg-white border-b border-outline-variant px-6 py-4 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="relative">
+                            <div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center font-bold text-sm" id="chatAvatar"></div>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold" id="chatPartnerName"></p>
+                            <p class="text-xs text-secondary" id="chatProductRef"></p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button class="text-sm px-3 py-1.5 border border-outline-variant rounded-lg hover:bg-surface-container-low transition-colors flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[16px]">shopping_bag</span> 주문 보기
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Messages -->
+                <div class="flex-1 overflow-y-auto p-6 flex flex-col gap-4" id="chatMessages">
+                </div>
+
+                <!-- Input Area -->
+                <div class="bg-white border-t border-outline-variant p-4">
+                    <div class="flex items-end gap-3">
+                        <button class="text-secondary hover:text-primary transition-colors flex-shrink-0 pb-1">
+                            <span class="material-symbols-outlined">attach_file</span>
+                        </button>
+                        <button class="text-secondary hover:text-primary transition-colors flex-shrink-0 pb-1">
+                            <span class="material-symbols-outlined">image</span>
+                        </button>
+                        <div class="flex-1">
+                            <textarea id="msgInput" rows="1" class="w-full border border-outline-variant rounded-xl px-4 py-3 text-sm resize-none focus:border-primary focus:outline-none" placeholder="메시지를 입력하세요..." style="max-height:120px"></textarea>
+                        </div>
+                        <button id="sendBtn" class="w-10 h-10 bg-primary text-on-primary rounded-full flex items-center justify-center flex-shrink-0 hover:bg-primary/90 transition-colors">
+                            <span class="material-symbols-outlined text-[20px]">send</span>
+                        </button>
+                    </div>
+                    <div class="flex items-center gap-4 mt-2 ml-[76px]">
+                        <button class="text-xs text-secondary hover:text-primary flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[14px]">receipt_long</span> 견적서 보내기
+                        </button>
+                        <button class="text-xs text-secondary hover:text-primary flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[14px]">local_offer</span> 가격 제안
+                        </button>
+                        <button class="text-xs text-secondary hover:text-primary flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[14px]">local_shipping</span> 운송장 전달
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="mobile-nav">
+        <a href="index.html"><span class="material-symbols-outlined">dashboard</span><span>대시보드</span></a>
+        <a href="inventory.html"><span class="material-symbols-outlined">inventory_2</span><span>재고</span></a>
+        <a href="orders.html"><span class="material-symbols-outlined">shopping_bag</span><span>주문</span></a>
+        <a href="messages.html" class="active"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">chat</span><span>메시지</span></a>
+        <a href="#"><span class="material-symbols-outlined">settings</span><span>설정</span></a>
+    </nav>
+    <script>
+        const msgInput = document.getElementById('msgInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const chatMessages = document.getElementById('chatMessages');
+
+        function addMessage(text, type) {
+            const bubble = document.createElement('div');
+            bubble.className = 'msg-bubble ' + type;
+            const time = new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+            const timeClass = type === 'outgoing' ? 'text-white/60' : 'text-secondary';
+            bubble.innerHTML = '<p>' + text.replace(/</g, '&lt;') + '</p><span class="text-[10px] ' + timeClass + ' mt-1 block">' + time + '</span>';
+            chatMessages.appendChild(bubble);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function sendMessage() {
+            const text = msgInput.value.trim();
+            if (!text) return;
+            addMessage(text, 'outgoing');
+            msgInput.value = '';
+            msgInput.style.height = 'auto';
+        }
+
+        sendBtn.addEventListener('click', sendMessage);
+        msgInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+        });
+        msgInput.addEventListener('input', () => {
+            msgInput.style.height = 'auto';
+            msgInput.style.height = Math.min(msgInput.scrollHeight, 120) + 'px';
+        });
+    </script>
+</body>
+</html>

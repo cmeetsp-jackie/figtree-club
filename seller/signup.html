@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>판매자 가입 - Figtree Club</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Manrope:wght@600;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#000000", "on-primary": "#ffffff", "secondary": "#5e5e5e",
+                        "surface": "#fcf9f8", "surface-container-low": "#f6f3f2",
+                        "surface-container-high": "#eae7e7", "outline-variant": "#cfc4c5",
+                        "on-surface": "#1c1b1b", "error": "#ba1a1a", "background": "#fcf9f8"
+                    },
+                    fontFamily: { "display": ["Manrope"], "body": ["Inter"] }
+                }
+            }
+        }
+    </script>
+    <style>
+        .ghost-input { border: 1px solid #E5E5E5; transition: border-color 0.2s; }
+        .ghost-input:focus { border-color: #000; outline: none; box-shadow: none; }
+    </style>
+</head>
+<body class="bg-background min-h-screen flex items-center justify-center px-4 py-8">
+    <div class="w-full max-w-lg">
+        <div class="text-center mb-10">
+            <h1 class="font-display text-3xl font-black tracking-tighter mb-2">Figtree Club</h1>
+            <div class="inline-flex items-center gap-2 bg-primary text-on-primary px-4 py-1.5 rounded-full text-sm font-semibold">
+                <span class="material-symbols-outlined text-[18px]">storefront</span>
+                판매자 센터
+            </div>
+        </div>
+
+        <div class="bg-white border border-outline-variant rounded-xl p-8">
+            <h2 class="font-display text-xl font-bold mb-1">판매자 가입</h2>
+            <p class="text-secondary text-sm mb-6">Figtree Club에서 도매 비즈니스를 시작하세요.</p>
+
+            <form id="signupForm" class="flex flex-col gap-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold mb-1.5">이름</label>
+                        <input type="text" class="w-full ghost-input rounded-lg px-4 py-3 text-sm" placeholder="홍길동" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-1.5">상호명</label>
+                        <input type="text" class="w-full ghost-input rounded-lg px-4 py-3 text-sm" placeholder="빈티지 서플라이 코." required>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-1.5">이메일</label>
+                    <input type="email" class="w-full ghost-input rounded-lg px-4 py-3 text-sm" placeholder="seller@example.com" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-1.5">전화번호</label>
+                    <input type="tel" class="w-full ghost-input rounded-lg px-4 py-3 text-sm" placeholder="+82 10-1234-5678" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-1.5">비밀번호</label>
+                    <input type="password" class="w-full ghost-input rounded-lg px-4 py-3 text-sm" placeholder="6자 이상" required minlength="6">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-1.5">사업 위치</label>
+                    <select class="w-full ghost-input rounded-lg px-4 py-3 text-sm bg-white">
+                        <option>한국</option>
+                        <option>일본</option>
+                        <option>태국</option>
+                        <option>홍콩</option>
+                        <option>대만</option>
+                        <option>싱가포르</option>
+                        <option>영국</option>
+                        <option>기타</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-1.5">주요 취급 품목</label>
+                    <div class="flex flex-wrap gap-2">
+                        <label class="flex items-center gap-1.5 text-sm px-3 py-1.5 border border-outline-variant rounded-full cursor-pointer hover:bg-surface-container-low has-[:checked]:bg-primary has-[:checked]:text-on-primary has-[:checked]:border-primary transition-colors">
+                            <input type="checkbox" class="hidden" value="빈티지"> 빈티지
+                        </label>
+                        <label class="flex items-center gap-1.5 text-sm px-3 py-1.5 border border-outline-variant rounded-full cursor-pointer hover:bg-surface-container-low has-[:checked]:bg-primary has-[:checked]:text-on-primary has-[:checked]:border-primary transition-colors">
+                            <input type="checkbox" class="hidden" value="스포츠웨어"> 스포츠웨어
+                        </label>
+                        <label class="flex items-center gap-1.5 text-sm px-3 py-1.5 border border-outline-variant rounded-full cursor-pointer hover:bg-surface-container-low has-[:checked]:bg-primary has-[:checked]:text-on-primary has-[:checked]:border-primary transition-colors">
+                            <input type="checkbox" class="hidden" value="데님"> 데님
+                        </label>
+                        <label class="flex items-center gap-1.5 text-sm px-3 py-1.5 border border-outline-variant rounded-full cursor-pointer hover:bg-surface-container-low has-[:checked]:bg-primary has-[:checked]:text-on-primary has-[:checked]:border-primary transition-colors">
+                            <input type="checkbox" class="hidden" value="스트릿웨어"> 스트릿웨어
+                        </label>
+                        <label class="flex items-center gap-1.5 text-sm px-3 py-1.5 border border-outline-variant rounded-full cursor-pointer hover:bg-surface-container-low has-[:checked]:bg-primary has-[:checked]:text-on-primary has-[:checked]:border-primary transition-colors">
+                            <input type="checkbox" class="hidden" value="럭셔리"> 럭셔리
+                        </label>
+                    </div>
+                </div>
+                <label class="flex items-start gap-2 mt-2 cursor-pointer">
+                    <input type="checkbox" class="rounded border-outline-variant mt-0.5" required>
+                    <span class="text-xs text-secondary"><a href="#" class="text-primary underline">서비스 이용약관</a> 및 <a href="#" class="text-primary underline">판매자 가이드라인</a>에 동의합니다.</span>
+                </label>
+                <button type="submit" class="w-full py-3.5 bg-primary text-on-primary rounded-lg font-semibold text-sm hover:bg-primary/90 transition-colors mt-2">
+                    판매자 가입하기
+                </button>
+            </form>
+
+            <div class="mt-6 pt-6 border-t border-outline-variant text-center">
+                <p class="text-sm text-secondary">이미 판매자 계정이 있으신가요? <a href="login.html" class="text-primary font-semibold hover:underline">로그인</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('signupForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>

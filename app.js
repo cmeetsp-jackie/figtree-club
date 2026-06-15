@@ -120,7 +120,10 @@
         const products = [
             { id: 'ralph-polo', name: '랄프 로렌 폴로', price: 239000, original: 383000 },
             { id: 'nike-jacket', name: '나이키 자켓 #1', price: 780000, original: 780000 },
-            { id: 'ua-shorts', name: '언더아머 반바지', price: 79000, original: 107000 }
+            { id: 'ua-shorts', name: '언더아머 반바지', price: 79000, original: 107000 },
+            { id: 'champion-hoodie', name: '챔피온 리버스위브 후디', price: 580000, original: 720000 },
+            { id: 'levis-denim', name: '리바이스 501 데님 믹스', price: 650000, original: 1180000 },
+            { id: 'adidas-tracktop', name: '아디다스 빈티지 트랙탑', price: 340000, original: 480000 }
         ];
         const cards = document.querySelectorAll('article.bundle-card');
 
@@ -243,6 +246,67 @@
         // Hero scroll
         const cta = document.querySelector('a[href="#inventory"]');
         if (cta) cta.addEventListener('click', (e) => { e.preventDefault(); document.getElementById('inventory')?.scrollIntoView({ behavior: 'smooth' }); });
+
+        // Category chips
+        document.querySelectorAll('.cat-chip').forEach(chip => {
+            chip.addEventListener('click', (e) => {
+                document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+            });
+        });
+    }
+
+    // ==================== CHAT WIDGET ====================
+    function initChat() {
+        const panel = document.getElementById('chatPanel');
+        const toggleBtn = document.getElementById('chatToggleBtn');
+        const header = document.getElementById('chatHeader');
+        const minimize = document.getElementById('chatMinimize');
+        const input = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('chatSendBtn');
+        const body = document.getElementById('chatBody');
+
+        if (!panel || !toggleBtn) return;
+
+        function openChat() { panel.classList.add('open'); input?.focus(); }
+        function closeChat() { panel.classList.remove('open'); }
+
+        toggleBtn.addEventListener('click', openChat);
+        if (minimize) minimize.addEventListener('click', closeChat);
+        if (header) header.addEventListener('click', (e) => {
+            if (e.target === minimize || e.target.closest('#chatMinimize')) return;
+            panel.classList.contains('open') ? closeChat() : openChat();
+        });
+
+        function sendMessage() {
+            const text = input?.value?.trim();
+            if (!text) return;
+            const bubble = document.createElement('div');
+            bubble.className = 'chat-bubble user';
+            bubble.textContent = text;
+            body.appendChild(bubble);
+            input.value = '';
+            body.scrollTop = body.scrollHeight;
+
+            // Simulate supplier auto-reply
+            setTimeout(() => {
+                const replies = [
+                    '감사합니다! 해당 번들에 대해 자세히 알려드릴게요.',
+                    '네, 수량 조정도 가능합니다. 원하시는 수량을 알려주세요.',
+                    '현재 재고가 충분합니다. 추가 사진이 필요하시면 말씀해주세요.',
+                    '대량 주문 시 추가 할인도 가능합니다. 몇 벌 정도 생각하고 계신가요?',
+                    '배송은 주문 확인 후 24시간 이내에 발송됩니다.'
+                ];
+                const reply = document.createElement('div');
+                reply.className = 'chat-bubble supplier';
+                reply.textContent = replies[Math.floor(Math.random() * replies.length)];
+                body.appendChild(reply);
+                body.scrollTop = body.scrollHeight;
+            }, 1200);
+        }
+
+        if (sendBtn) sendBtn.addEventListener('click', sendMessage);
+        if (input) input.addEventListener('keydown', (e) => { if (e.key === 'Enter') sendMessage(); });
     }
 
     // ==================== BUNDLE INFO PAGE ====================
@@ -340,6 +404,9 @@
         document.querySelectorAll('a').forEach(a => {
             if (a.textContent.includes('프로필 보기')) a.href = link('supplyprofile.html');
         });
+
+        // Init chat widget
+        initChat();
     }
 
     // ==================== SUPPLIER PROFILE PAGE ====================
@@ -574,9 +641,9 @@
         document.head.appendChild(style);
 
         const path = decodeURIComponent(location.pathname);
-        if (path.includes('main')) initMain();
-        else if (path.includes('bundleinfo')) initBundle();
+        if (path.includes('bundleinfo')) initBundle();
         else if (path.includes('supplyprofile')) initSupplier();
         else if (path.includes('cart') || path.includes('check-in')) initCart();
+        else initMain();
     });
 })();

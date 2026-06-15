@@ -123,6 +123,71 @@
         .bundle-card:hover {
             box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.12);
         }
+
+        .scroll-carousel {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        .scroll-carousel::-webkit-scrollbar { display: none; }
+        .scroll-carousel > * { scroll-snap-align: start; flex-shrink: 0; }
+
+        .carousel-wrapper { position: relative; }
+        .carousel-btn {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            width: 40px; height: 40px; border-radius: 50%;
+            background: rgba(255,255,255,0.95); border: 1px solid #e5e5e5;
+            align-items: center; justify-content: center;
+            cursor: pointer; z-index: 10;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.2s;
+        }
+        .carousel-btn:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .carousel-btn.prev { left: -16px; }
+        .carousel-btn.next { right: -16px; }
+
+        .cat-chip {
+            display: inline-block; white-space: nowrap; padding: 8px 16px;
+            border-radius: 999px; border: 1px solid #cfc4c5;
+            font-size: 14px; font-weight: 600; color: #5e5e5e;
+            transition: all 0.2s; cursor: pointer; text-decoration: none;
+        }
+        .cat-chip:hover, .cat-chip.active {
+            background: #000; color: #fff; border-color: #000;
+        }
+
+        .collection-card {
+            position: relative; border-radius: 12px; overflow: hidden;
+            cursor: pointer; aspect-ratio: 3/4;
+        }
+        .collection-card img {
+            width: 100%; height: 100%; object-fit: cover; transition: transform .5s;
+        }
+        .collection-card:hover img { transform: scale(1.05); }
+        .collection-card .overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,.7) 0%, transparent 60%);
+            display: flex; flex-direction: column; justify-content: flex-end; padding: 20px;
+        }
+
+        .vendor-card {
+            flex: 0 0 300px; min-width: 300px;
+            border: 1px solid #cfc4c5; border-radius: 12px;
+            padding: 24px; background: #fff; cursor: pointer; transition: box-shadow .2s;
+        }
+        .vendor-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,.1); }
+
+        .stat-number {
+            font-family: Manrope, sans-serif; font-size: 48px; font-weight: 700;
+            line-height: 1; letter-spacing: -0.02em;
+        }
+        @media (max-width: 768px) {
+            .carousel-btn { display: none; }
+            .vendor-card { flex: 0 0 260px; min-width: 260px; }
+            .stat-number { font-size: 36px; }
+        }
     </style>
 </head>
 
@@ -192,6 +257,369 @@
             </div>
         </div>
     </section>
+
+    <!-- Category Chips Bar -->
+    <section class="w-full border-b border-outline-variant bg-surface">
+        <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-4">
+            <div class="scroll-carousel gap-3">
+                <a class="cat-chip active" href="#inventory">전체</a>
+                <a class="cat-chip" href="#inventory">티셔츠</a>
+                <a class="cat-chip" href="#inventory">후디 & 스웨트</a>
+                <a class="cat-chip" href="#inventory">자켓 & 아우터</a>
+                <a class="cat-chip" href="#inventory">데님</a>
+                <a class="cat-chip" href="#inventory">폴로 & 셔츠</a>
+                <a class="cat-chip" href="#inventory">반바지</a>
+                <a class="cat-chip" href="#inventory">니트웨어</a>
+                <a class="cat-chip" href="#inventory">스포츠웨어</a>
+                <a class="cat-chip" href="#inventory">빈티지</a>
+                <a class="cat-chip" href="#inventory">Y2K</a>
+                <a class="cat-chip" href="#inventory">럭셔리</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Latest Drops Carousel -->
+    <section class="w-full bg-surface py-12 md:py-16">
+        <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h2 class="font-headline-lg text-headline-lg font-bold">최신 입고</h2>
+                    <p class="text-secondary font-body-sm text-body-sm mt-1">방금 도착한 신선한 번들</p>
+                </div>
+                <a href="#inventory" class="text-primary font-title-md text-title-md hover:underline hidden md:inline-flex items-center gap-1">
+                    전체 보기 <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                </a>
+            </div>
+            <div class="carousel-wrapper">
+                <button class="carousel-btn prev" style="display:flex" onclick="this.nextElementSibling.scrollBy({left:-300,behavior:'smooth'})">
+                    <span class="material-symbols-outlined">chevron_left</span>
+                </button>
+                <div class="scroll-carousel gap-4" style="padding:4px 0;">
+                    <!-- Latest Drop 1 -->
+                    <article class="bundle-card flex flex-col bg-surface rounded-xl overflow-hidden border border-outline-variant transition-shadow cursor-pointer group" style="flex:0 0 280px;min-width:280px" onclick="location.href='bundleinfo.html'">
+                        <div class="relative aspect-[4/5] bg-surface-container-low overflow-hidden">
+                            <img alt="빈티지 나이키 윈드브레이커" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDq6pQCAWRa3F8PvB1ziLVN1JqOkmYxqJfwV1MA1JS2SImODwiKa9dGg6BwoYSKnhMERvNlbqXaW2462LYfxUsD20i8OEN0oBQ4CiRB9R8QeGyRPX65SygvzP9QIMbUbXxWYVZ6uHeHmZ4K27O9xGHck72Wg6VKkuQ1lcj_Gonmdpnhl_FTH5PfwjL3qKa3J0Upu75EU_45_UUWCRnClNY5XLothhed4A_yBJ_73jEsHzmIPcyKDFbeTkTE38zPPKbPCs1tni2Z5Ij2">
+                            <div class="absolute top-3 left-3 bg-error text-on-error px-2 py-1 rounded text-xs font-label-caps tracking-wider">NEW</div>
+                        </div>
+                        <div class="p-stack-md flex flex-col gap-1">
+                            <h4 class="font-title-md text-title-md text-primary truncate">빈티지 나이키 윈드브레이커</h4>
+                            <p class="font-body-sm text-body-sm text-secondary">서울 빈티지 코.</p>
+                            <div class="mt-1 flex items-baseline gap-2">
+                                <span class="font-headline-lg-mobile text-headline-lg-mobile text-primary">₩420,000</span>
+                            </div>
+                            <span class="text-xs text-secondary">개당 ₩42,000 · 10개</span>
+                        </div>
+                    </article>
+                    <!-- Latest Drop 2 -->
+                    <article class="bundle-card flex flex-col bg-surface rounded-xl overflow-hidden border border-outline-variant transition-shadow cursor-pointer group" style="flex:0 0 280px;min-width:280px" onclick="location.href='bundleinfo.html'">
+                        <div class="relative aspect-[4/5] bg-surface-container-low overflow-hidden">
+                            <img alt="챔피온 리버스위브 후디" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA45B3LLTpuvfAkoZVlWAYQrNpSeWnXVQoYE6hpV3FRYA3GP1VEuSGtAPfMy1Fl1bibyojJXd_LypuG2gpGwgQ2-mh0tWjNGACQgqHGY4zh9-Ypi0btS8hBKXggCLLk2cVGqrmpHHoDBCvjX8R54LTZpedz8n4FaCo9AOeaZvSS3y7xmy2e9nAahdh6wqfoflbWOWo3_TsBRtM5ctLih1Z2dExUJ4W_OpoWiYdumFj57__qtQarPCgPMaHlom4w8dXlJUb6_uHK9bnD">
+                            <div class="absolute top-3 left-3 bg-error text-on-error px-2 py-1 rounded text-xs font-label-caps tracking-wider">NEW</div>
+                        </div>
+                        <div class="p-stack-md flex flex-col gap-1">
+                            <h4 class="font-title-md text-title-md text-primary truncate">챔피온 리버스위브 후디</h4>
+                            <p class="font-body-sm text-body-sm text-secondary">도쿄 트레이드 Co.</p>
+                            <div class="mt-1 flex items-baseline gap-2">
+                                <span class="font-headline-lg-mobile text-headline-lg-mobile text-primary">₩580,000</span>
+                                <span class="font-body-sm text-body-sm text-secondary line-through">₩720,000</span>
+                            </div>
+                            <span class="text-xs text-secondary">개당 ₩29,000 · 20개</span>
+                        </div>
+                    </article>
+                    <!-- Latest Drop 3 -->
+                    <article class="bundle-card flex flex-col bg-surface rounded-xl overflow-hidden border border-outline-variant transition-shadow cursor-pointer group" style="flex:0 0 280px;min-width:280px" onclick="location.href='bundleinfo.html'">
+                        <div class="relative aspect-[4/5] bg-surface-container-low overflow-hidden">
+                            <img alt="리바이스 501 데님" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3dUedUkz7cCFBb5LJ2Z3hC0Af9iafIqxkwsKJohDErDs6ptVo2Ne2oQP5YwPx4cUahpqC3jrSb2hr7i7flbEsaQEvad_qRPu5R9vwrNXHL3qpNAkqkb4kFDTRkNmgMpEJrPLoLBWXUAZ3V04x45xO3kUKPHvXemzwpIeEw92HCOhG_AbFGvqZ0DSsUk3guYxQGPLnHASO6tvOk-Vi3yvcUKTaJ5EGOeTGLPFTQps_anW86a4cu_lIJ4ol8H1hy8T0KN9-oHK2uore">
+                            <div class="absolute top-3 left-3 bg-error text-on-error px-2 py-1 rounded text-xs font-label-caps tracking-wider">NEW</div>
+                        </div>
+                        <div class="p-stack-md flex flex-col gap-1">
+                            <h4 class="font-title-md text-title-md text-primary truncate">리바이스 501 데님 믹스</h4>
+                            <p class="font-body-sm text-body-sm text-secondary">오사카 데님 하우스</p>
+                            <div class="mt-1 flex items-baseline gap-2">
+                                <span class="font-headline-lg-mobile text-headline-lg-mobile text-primary">₩650,000</span>
+                            </div>
+                            <span class="text-xs text-secondary">개당 ₩43,000 · 15개</span>
+                        </div>
+                    </article>
+                    <!-- Latest Drop 4 -->
+                    <article class="bundle-card flex flex-col bg-surface rounded-xl overflow-hidden border border-outline-variant transition-shadow cursor-pointer group" style="flex:0 0 280px;min-width:280px" onclick="location.href='bundleinfo.html'">
+                        <div class="relative aspect-[4/5] bg-surface-container-low overflow-hidden">
+                            <img alt="아디다스 트랙탑" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfsg2lr9aWq5MIGyHCzpZxmRKPFGuTiKiqx6SW4MPH11ZjPmSytcFqI6AePwFouqn4KejDkisnKJWxZM_e9BfAV314K_WLHARDj64eNZKbe1v94Hf5ltyW37ByxV-z84u41BrpBGxVwcUjDCnYYqPDj8Nu1TzzIkuSQxVizFY1ghCcT3qP_9vNEDVvyzmgf1cdUBoQbPocdZcpNAp7vb0M5Zp2B5_3Ch2XEvs9v-Nr83_A2ekcTnb_mmYD-06IAN6ymAfxhkvqqw09">
+                            <div class="absolute top-3 left-3 bg-error text-on-error px-2 py-1 rounded text-xs font-label-caps tracking-wider">NEW</div>
+                        </div>
+                        <div class="p-stack-md flex flex-col gap-1">
+                            <h4 class="font-title-md text-title-md text-primary truncate">아디다스 빈티지 트랙탑</h4>
+                            <p class="font-body-sm text-body-sm text-secondary">방콕 스포츠 트레이드</p>
+                            <div class="mt-1 flex items-baseline gap-2">
+                                <span class="font-headline-lg-mobile text-headline-lg-mobile text-primary">₩340,000</span>
+                                <span class="font-body-sm text-body-sm text-secondary line-through">₩480,000</span>
+                            </div>
+                            <span class="text-xs text-secondary">개당 ₩34,000 · 10개</span>
+                        </div>
+                    </article>
+                    <!-- Latest Drop 5 -->
+                    <article class="bundle-card flex flex-col bg-surface rounded-xl overflow-hidden border border-outline-variant transition-shadow cursor-pointer group" style="flex:0 0 280px;min-width:280px" onclick="location.href='bundleinfo.html'">
+                        <div class="relative aspect-[4/5] bg-surface-container-low overflow-hidden">
+                            <img alt="카하트 워크웨어" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDq6pQCAWRa3F8PvB1ziLVN1JqOkmYxqJfwV1MA1JS2SImODwiKa9dGg6BwoYSKnhMERvNlbqXaW2462LYfxUsD20i8OEN0oBQ4CiRB9R8QeGyRPX65SygvzP9QIMbUbXxWYVZ6uHeHmZ4K27O9xGHck72Wg6VKkuQ1lcj_Gonmdpnhl_FTH5PfwjL3qKa3J0Upu75EU_45_UUWCRnClNY5XLothhed4A_yBJ_73jEsHzmIPcyKDFbeTkTE38zPPKbPCs1tni2Z5Ij2">
+                            <div class="absolute top-3 left-3 bg-error text-on-error px-2 py-1 rounded text-xs font-label-caps tracking-wider">NEW</div>
+                        </div>
+                        <div class="p-stack-md flex flex-col gap-1">
+                            <h4 class="font-title-md text-title-md text-primary truncate">카하트 워크웨어 믹스</h4>
+                            <p class="font-body-sm text-body-sm text-secondary">홍콩 빈티지 Ltd.</p>
+                            <div class="mt-1 flex items-baseline gap-2">
+                                <span class="font-headline-lg-mobile text-headline-lg-mobile text-primary">₩890,000</span>
+                            </div>
+                            <span class="text-xs text-secondary">개당 ₩35,600 · 25개</span>
+                        </div>
+                    </article>
+                </div>
+                <button class="carousel-btn next" style="display:flex" onclick="this.previousElementSibling.scrollBy({left:300,behavior:'smooth'})">
+                    <span class="material-symbols-outlined">chevron_right</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Top Collections Grid -->
+    <section class="w-full bg-surface-container-low py-12 md:py-16 border-y border-outline-variant">
+        <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+            <div class="flex justify-between items-center mb-8">
+                <div>
+                    <h2 class="font-headline-lg text-headline-lg font-bold">인기 컬렉션</h2>
+                    <p class="text-secondary font-body-sm text-body-sm mt-1">카테고리별로 찾아보세요</p>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <a href="#inventory" class="collection-card">
+                    <img alt="후디 & 스웨트" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA45B3LLTpuvfAkoZVlWAYQrNpSeWnXVQoYE6hpV3FRYA3GP1VEuSGtAPfMy1Fl1bibyojJXd_LypuG2gpGwgQ2-mh0tWjNGACQgqHGY4zh9-Ypi0btS8hBKXggCLLk2cVGqrmpHHoDBCvjX8R54LTZpedz8n4FaCo9AOeaZvSS3y7xmy2e9nAahdh6wqfoflbWOWo3_TsBRtM5ctLih1Z2dExUJ4W_OpoWiYdumFj57__qtQarPCgPMaHlom4w8dXlJUb6_uHK9bnD">
+                    <div class="overlay">
+                        <span class="text-white font-title-md text-title-md font-bold">후디 & 스웨트</span>
+                        <span class="text-white/70 text-sm mt-1">최대 40% 할인</span>
+                    </div>
+                </a>
+                <a href="#inventory" class="collection-card">
+                    <img alt="자켓 & 아우터" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDq6pQCAWRa3F8PvB1ziLVN1JqOkmYxqJfwV1MA1JS2SImODwiKa9dGg6BwoYSKnhMERvNlbqXaW2462LYfxUsD20i8OEN0oBQ4CiRB9R8QeGyRPX65SygvzP9QIMbUbXxWYVZ6uHeHmZ4K27O9xGHck72Wg6VKkuQ1lcj_Gonmdpnhl_FTH5PfwjL3qKa3J0Upu75EU_45_UUWCRnClNY5XLothhed4A_yBJ_73jEsHzmIPcyKDFbeTkTE38zPPKbPCs1tni2Z5Ij2">
+                    <div class="overlay">
+                        <span class="text-white font-title-md text-title-md font-bold">자켓 & 아우터</span>
+                        <span class="text-white/70 text-sm mt-1">최대 35% 할인</span>
+                    </div>
+                </a>
+                <a href="#inventory" class="collection-card">
+                    <img alt="데님" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3dUedUkz7cCFBb5LJ2Z3hC0Af9iafIqxkwsKJohDErDs6ptVo2Ne2oQP5YwPx4cUahpqC3jrSb2hr7i7flbEsaQEvad_qRPu5R9vwrNXHL3qpNAkqkb4kFDTRkNmgMpEJrPLoLBWXUAZ3V04x45xO3kUKPHvXemzwpIeEw92HCOhG_AbFGvqZ0DSsUk3guYxQGPLnHASO6tvOk-Vi3yvcUKTaJ5EGOeTGLPFTQps_anW86a4cu_lIJ4ol8H1hy8T0KN9-oHK2uore">
+                    <div class="overlay">
+                        <span class="text-white font-title-md text-title-md font-bold">데님</span>
+                        <span class="text-white/70 text-sm mt-1">최대 50% 할인</span>
+                    </div>
+                </a>
+                <a href="#inventory" class="collection-card">
+                    <img alt="스포츠웨어" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfsg2lr9aWq5MIGyHCzpZxmRKPFGuTiKiqx6SW4MPH11ZjPmSytcFqI6AePwFouqn4KejDkisnKJWxZM_e9BfAV314K_WLHARDj64eNZKbe1v94Hf5ltyW37ByxV-z84u41BrpBGxVwcUjDCnYYqPDj8Nu1TzzIkuSQxVizFY1ghCcT3qP_9vNEDVvyzmgf1cdUBoQbPocdZcpNAp7vb0M5Zp2B5_3Ch2XEvs9v-Nr83_A2ekcTnb_mmYD-06IAN6ymAfxhkvqqw09">
+                    <div class="overlay">
+                        <span class="text-white font-title-md text-title-md font-bold">스포츠웨어</span>
+                        <span class="text-white/70 text-sm mt-1">최대 30% 할인</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Vendors Carousel -->
+    <section class="w-full bg-surface py-12 md:py-16">
+        <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h2 class="font-headline-lg text-headline-lg font-bold">추천 공급업체</h2>
+                    <p class="text-secondary font-body-sm text-body-sm mt-1">검증된 아시아 최고의 도매 공급업체</p>
+                </div>
+                <a href="supplyprofile.html" class="text-primary font-title-md text-title-md hover:underline hidden md:inline-flex items-center gap-1">
+                    전체 보기 <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                </a>
+            </div>
+            <div class="carousel-wrapper">
+                <button class="carousel-btn prev" style="display:flex" onclick="this.nextElementSibling.scrollBy({left:-320,behavior:'smooth'})">
+                    <span class="material-symbols-outlined">chevron_left</span>
+                </button>
+                <div class="scroll-carousel gap-4" style="padding:4px 0;">
+                    <div class="vendor-card" onclick="location.href='supplyprofile.html'">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center font-bold text-lg">VS</div>
+                            <div>
+                                <div class="flex items-center gap-1">
+                                    <span class="font-title-md text-title-md font-bold">빈티지 서플라이 코.</span>
+                                    <span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings:'FILL' 1">verified</span>
+                                </div>
+                                <span class="text-secondary text-sm">서울, 한국</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4 text-sm text-secondary mb-3">
+                            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings:'FILL' 1">star</span> 4.9</span>
+                            <span>124 리뷰</span>
+                            <span>2시간 응답</span>
+                        </div>
+                        <p class="text-sm text-secondary mb-3">프리미엄 빈티지 의류 전문. 랄프 로렌, 라코스테, 타미힐피거 등 정통 브랜드 번들.</p>
+                        <div class="flex gap-2">
+                            <span class="text-xs px-2 py-1 bg-surface-container-low rounded-full">폴로</span>
+                            <span class="text-xs px-2 py-1 bg-surface-container-low rounded-full">니트</span>
+                            <span class="text-xs px-2 py-1 bg-surface-container-low rounded-full">자켓</span>
+                        </div>
+                    </div>
+                    <div class="vendor-card" onclick="location.href='supplyprofile.html'">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center font-bold text-lg">TT</div>
+                            <div>
+                                <div class="flex items-center gap-1">
+                                    <span class="font-title-md text-title-md font-bold">도쿄 트레이드 Co.</span>
+                                    <span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings:'FILL' 1">verified</span>
+                                </div>
+                                <span class="text-secondary text-sm">도쿄, 일본</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4 text-sm text-secondary mb-3">
+                            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings:'FILL' 1">star</span> 4.8</span>
+                            <span>89 리뷰</span>
+                            <span>1시간 응답</span>
+                        </div>
+                        <p class="text-sm text-secondary mb-3">일본산 빈티지 스트리트웨어 & 스포츠웨어. 챔피온, 나이키, 아디다스 중심.</p>
+                        <div class="flex gap-2">
+                            <span class="text-xs px-2 py-1 bg-surface-container-low rounded-full">후디</span>
+                            <span class="text-xs px-2 py-1 bg-surface-container-low rounded-full">스포츠</span>
+                            <span class="text-xs px-2 py-1 bg-surface-container-low rounded-full">스트릿</span>
+                        </div>
+                    </div>
+                    <div class="vendor-card" onclick="location.href='supplyprofile.html'">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center font-bold text-lg">OD</div>
+                            <div>
+                                <div class="flex items-center gap-1">
+                                    <span class="font-title-md text-title-md font-bold">오사카 데님 하우스</span>
+                                    <span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings:'FILL' 1">verified</span>
+                                </div>
+                                <span class="text-secondary text-sm">오사카, 일본</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4 text-sm text-secondary mb-3">
+                            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings:'FILL' 1">star</span> 4.7</span>
+                            <span>67 리뷰</span>
+                            <span>3시간 응답</span>
+                        </div>
+                        <p class="text-sm text-secondary mb-3">리바이스, 에드윈, 웨스턴글러 등 프리미엄 데님 전문 도매 공급.</p>
+                        <div class="flex gap-2">
+                            <span class="text-xs px-2 py-1 bg-surface-container-low rounded-full">데님</span>
+                            <span class="text-xs px-2 py-1 bg-surface-container-low rounded-full">진</span>
+                            <span class="text-xs px-2 py-1 bg-surface-container-low rounded-full">자켓</span>
+                        </div>
+                    </div>
+                    <div class="vendor-card" onclick="location.href='supplyprofile.html'">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center font-bold text-lg">BS</div>
+                            <div>
+                                <div class="flex items-center gap-1">
+                                    <span class="font-title-md text-title-md font-bold">방콕 스포츠 트레이드</span>
+                                    <span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings:'FILL' 1">verified</span>
+                                </div>
+                                <span class="text-secondary text-sm">방콕, 태국</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4 text-sm text-secondary mb-3">
+                            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings:'FILL' 1">star</span> 4.6</span>
+                            <span>203 리뷰</span>
+                            <span>30분 응답</span>
+                        </div>
+                        <p class="text-sm text-secondary mb-3">동남아 최대 스포츠웨어 도매. 나이키, 아디다스, 퓨마 대량 번들 전문.</p>
+                        <div class="flex gap-2">
+                            <span class="text-xs px-2 py-1 bg-surface-container-low rounded-full">스포츠</span>
+                            <span class="text-xs px-2 py-1 bg-surface-container-low rounded-full">트레이닝</span>
+                            <span class="text-xs px-2 py-1 bg-surface-container-low rounded-full">반바지</span>
+                        </div>
+                    </div>
+                    <div class="vendor-card" onclick="location.href='supplyprofile.html'">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center font-bold text-lg">HV</div>
+                            <div>
+                                <div class="flex items-center gap-1">
+                                    <span class="font-title-md text-title-md font-bold">홍콩 빈티지 Ltd.</span>
+                                    <span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings:'FILL' 1">verified</span>
+                                </div>
+                                <span class="text-secondary text-sm">홍콩</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4 text-sm text-secondary mb-3">
+                            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings:'FILL' 1">star</span> 4.9</span>
+                            <span>312 리뷰</span>
+                            <span>1시간 응답</span>
+                        </div>
+                        <p class="text-sm text-secondary mb-3">워크웨어 & 아메카지 전문. 카하트, 디키즈, 레드캡 등 대량 공급.</p>
+                        <div class="flex gap-2">
+                            <span class="text-xs px-2 py-1 bg-surface-container-low rounded-full">워크웨어</span>
+                            <span class="text-xs px-2 py-1 bg-surface-container-low rounded-full">카하트</span>
+                            <span class="text-xs px-2 py-1 bg-surface-container-low rounded-full">빈티지</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-btn next" style="display:flex" onclick="this.previousElementSibling.scrollBy({left:320,behavior:'smooth'})">
+                    <span class="material-symbols-outlined">chevron_right</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust & Stats Section -->
+    <section class="w-full bg-primary text-on-primary py-16 md:py-20">
+        <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+            <div class="text-center mb-12">
+                <h2 class="font-display-lg text-display-lg text-on-primary mb-4">아시아 리셀러들이 신뢰하는 플랫폼</h2>
+                <p class="text-on-primary/70 max-w-xl mx-auto">검증된 공급업체, 품질 보장, 안전한 거래. Figtree Club과 함께 비즈니스를 성장시키세요.</p>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+                <div class="text-center">
+                    <div class="stat-number text-on-primary">5,000+</div>
+                    <p class="text-on-primary/70 mt-2 text-sm">활성 리셀러</p>
+                </div>
+                <div class="text-center">
+                    <div class="stat-number text-on-primary">200+</div>
+                    <p class="text-on-primary/70 mt-2 text-sm">검증된 공급업체</p>
+                </div>
+                <div class="text-center">
+                    <div class="stat-number text-on-primary">50만+</div>
+                    <p class="text-on-primary/70 mt-2 text-sm">번들 거래 완료</p>
+                </div>
+                <div class="text-center">
+                    <div class="stat-number text-on-primary">12개국</div>
+                    <p class="text-on-primary/70 mt-2 text-sm">아시아 전역 배송</p>
+                </div>
+            </div>
+            <div class="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16 pt-8 border-t border-on-primary/20">
+                <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-[32px]" style="font-variation-settings:'FILL' 1">verified_user</span>
+                    <div>
+                        <p class="font-title-md text-title-md font-bold">구매자 보호</p>
+                        <p class="text-on-primary/70 text-sm">100% 환불 보장</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-[32px]" style="font-variation-settings:'FILL' 1">workspace_premium</span>
+                    <div>
+                        <p class="font-title-md text-title-md font-bold">품질 검증</p>
+                        <p class="text-on-primary/70 text-sm">모든 번들 검수 완료</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-[32px]" style="font-variation-settings:'FILL' 1">local_shipping</span>
+                    <div>
+                        <p class="font-title-md text-title-md font-bold">빠른 배송</p>
+                        <p class="text-on-primary/70 text-sm">아시아 3-5일 도착</p>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-10 pt-8 border-t border-on-primary/20 flex flex-col md:flex-row items-center justify-center gap-4">
+                <p class="text-on-primary/70 text-sm">도매 공급업체이신가요?</p>
+                <a href="seller/login.html" class="inline-flex items-center gap-2 bg-on-primary text-primary px-6 py-3 rounded-full font-title-md text-sm font-bold hover:bg-on-primary/90 transition-colors">
+                    <span class="material-symbols-outlined text-[18px]">storefront</span>
+                    판매자 센터 시작하기
+                </a>
+            </div>
+        </div>
+    </section>
+
     <!-- Main Content Layout -->
     <div class="flex-1 w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-stack-lg flex gap-gutter"
         id="inventory">
@@ -375,6 +803,87 @@
                         <span class="text-xs text-secondary mt-1">개당 ₩16,000</span>
                     </div>
                 </article>
+                <!-- Product Card 4 -->
+                <article
+                    class="bundle-card flex flex-col gap-stack-sm bg-surface rounded-xl overflow-hidden border border-outline-variant transition-shadow cursor-pointer relative group">
+                    <div class="relative aspect-[4/5] bg-surface-container-low overflow-hidden">
+                        <img alt="챔피온 리버스위브 후디 번들" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuA45B3LLTpuvfAkoZVlWAYQrNpSeWnXVQoYE6hpV3FRYA3GP1VEuSGtAPfMy1Fl1bibyojJXd_LypuG2gpGwgQ2-mh0tWjNGACQgqHGY4zh9-Ypi0btS8hBKXggCLLk2cVGqrmpHHoDBCvjX8R54LTZpedz8n4FaCo9AOeaZvSS3y7xmy2e9nAahdh6wqfoflbWOWo3_TsBRtM5ctLih1Z2dExUJ4W_OpoWiYdumFj57__qtQarPCgPMaHlom4w8dXlJUb6_uHK9bnD">
+                        <div class="absolute top-3 left-3 bg-primary text-on-primary px-2 py-1 rounded text-xs font-label-caps tracking-wider">19% 할인</div>
+                        <button class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface/80 backdrop-blur flex items-center justify-center text-primary hover:bg-surface transition-colors">
+                            <span class="material-symbols-outlined text-[18px]">favorite</span>
+                        </button>
+                    </div>
+                    <div class="p-stack-md flex flex-col gap-1">
+                        <div class="flex justify-between items-start">
+                            <h4 class="font-title-md text-title-md text-primary truncate pr-2">챔피온 리버스위브 후디</h4>
+                            <div class="flex items-center gap-1 text-secondary">
+                                <span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+                                <span class="font-body-sm text-body-sm">4.7</span>
+                            </div>
+                        </div>
+                        <p class="font-body-sm text-body-sm text-secondary">도쿄 트레이드 Co.</p>
+                        <div class="mt-2 flex items-baseline gap-2">
+                            <span class="font-headline-lg-mobile text-headline-lg-mobile text-primary">₩580,000</span>
+                            <span class="font-body-sm text-body-sm text-secondary line-through">₩720,000</span>
+                        </div>
+                        <span class="text-xs text-secondary mt-1">개당 ₩29,000 · 20개</span>
+                    </div>
+                </article>
+                <!-- Product Card 5 -->
+                <article
+                    class="bundle-card flex flex-col gap-stack-sm bg-surface rounded-xl overflow-hidden border border-outline-variant transition-shadow cursor-pointer relative group">
+                    <div class="relative aspect-[4/5] bg-surface-container-low overflow-hidden">
+                        <img alt="리바이스 501 데님 믹스" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3dUedUkz7cCFBb5LJ2Z3hC0Af9iafIqxkwsKJohDErDs6ptVo2Ne2oQP5YwPx4cUahpqC3jrSb2hr7i7flbEsaQEvad_qRPu5R9vwrNXHL3qpNAkqkb4kFDTRkNmgMpEJrPLoLBWXUAZ3V04x45xO3kUKPHvXemzwpIeEw92HCOhG_AbFGvqZ0DSsUk3guYxQGPLnHASO6tvOk-Vi3yvcUKTaJ5EGOeTGLPFTQps_anW86a4cu_lIJ4ol8H1hy8T0KN9-oHK2uore">
+                        <div class="absolute top-3 left-3 bg-primary text-on-primary px-2 py-1 rounded text-xs font-label-caps tracking-wider">45% 할인</div>
+                        <button class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface/80 backdrop-blur flex items-center justify-center text-primary hover:bg-surface transition-colors">
+                            <span class="material-symbols-outlined text-[18px]">favorite</span>
+                        </button>
+                    </div>
+                    <div class="p-stack-md flex flex-col gap-1">
+                        <div class="flex justify-between items-start">
+                            <h4 class="font-title-md text-title-md text-primary truncate pr-2">리바이스 501 데님 믹스</h4>
+                            <div class="flex items-center gap-1 text-secondary">
+                                <span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+                                <span class="font-body-sm text-body-sm">4.9</span>
+                            </div>
+                        </div>
+                        <p class="font-body-sm text-body-sm text-secondary">오사카 데님 하우스</p>
+                        <div class="mt-2 flex items-baseline gap-2">
+                            <span class="font-headline-lg-mobile text-headline-lg-mobile text-primary">₩650,000</span>
+                            <span class="font-body-sm text-body-sm text-secondary line-through">₩1,180,000</span>
+                        </div>
+                        <span class="text-xs text-secondary mt-1">개당 ₩43,000 · 15개</span>
+                    </div>
+                </article>
+                <!-- Product Card 6 -->
+                <article
+                    class="bundle-card flex flex-col gap-stack-sm bg-surface rounded-xl overflow-hidden border border-outline-variant transition-shadow cursor-pointer relative group">
+                    <div class="relative aspect-[4/5] bg-surface-container-low overflow-hidden">
+                        <img alt="아디다스 빈티지 트랙탑" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDq6pQCAWRa3F8PvB1ziLVN1JqOkmYxqJfwV1MA1JS2SImODwiKa9dGg6BwoYSKnhMERvNlbqXaW2462LYfxUsD20i8OEN0oBQ4CiRB9R8QeGyRPX65SygvzP9QIMbUbXxWYVZ6uHeHmZ4K27O9xGHck72Wg6VKkuQ1lcj_Gonmdpnhl_FTH5PfwjL3qKa3J0Upu75EU_45_UUWCRnClNY5XLothhed4A_yBJ_73jEsHzmIPcyKDFbeTkTE38zPPKbPCs1tni2Z5Ij2">
+                        <div class="absolute top-3 left-3 bg-primary text-on-primary px-2 py-1 rounded text-xs font-label-caps tracking-wider">29% 할인</div>
+                        <button class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface/80 backdrop-blur flex items-center justify-center text-primary hover:bg-surface transition-colors">
+                            <span class="material-symbols-outlined text-[18px]">favorite</span>
+                        </button>
+                    </div>
+                    <div class="p-stack-md flex flex-col gap-1">
+                        <div class="flex justify-between items-start">
+                            <h4 class="font-title-md text-title-md text-primary truncate pr-2">아디다스 빈티지 트랙탑</h4>
+                            <div class="flex items-center gap-1 text-secondary">
+                                <span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+                                <span class="font-body-sm text-body-sm">4.3</span>
+                            </div>
+                        </div>
+                        <p class="font-body-sm text-body-sm text-secondary">방콕 스포츠 트레이드</p>
+                        <div class="mt-2 flex items-baseline gap-2">
+                            <span class="font-headline-lg-mobile text-headline-lg-mobile text-primary">₩340,000</span>
+                            <span class="font-body-sm text-body-sm text-secondary line-through">₩480,000</span>
+                        </div>
+                        <span class="text-xs text-secondary mt-1">개당 ₩34,000 · 10개</span>
+                    </div>
+                </article>
                 <!-- Promotional Block (Bento style) -->
                 <div
                     class="sm:col-span-2 lg:col-span-3 bg-surface-container-high rounded-xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 border border-outline-variant overflow-hidden relative">
@@ -396,6 +905,96 @@
             </div>
         </main>
     </div>
+    <!-- How It Works -->
+    <section class="w-full bg-surface-container-low py-16 md:py-20 border-t border-outline-variant">
+        <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+            <div class="text-center mb-12">
+                <h2 class="font-display-lg text-display-lg text-primary mb-4">어떻게 시작하나요?</h2>
+                <p class="text-secondary max-w-lg mx-auto">초보 리셀러도 쉽게 시작할 수 있습니다. 3단계로 도매 비즈니스를 시작하세요.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center px-4">
+                    <div class="w-16 h-16 rounded-full bg-primary text-on-primary flex items-center justify-center mx-auto mb-4">
+                        <span class="material-symbols-outlined text-[28px]">search</span>
+                    </div>
+                    <h3 class="font-title-md text-title-md font-bold mb-2">1. 번들 탐색</h3>
+                    <p class="text-secondary text-sm">카테고리, 브랜드, 가격별로 원하는 번들을 찾아보세요. 소량 10개부터 시작 가능합니다.</p>
+                </div>
+                <div class="text-center px-4">
+                    <div class="w-16 h-16 rounded-full bg-primary text-on-primary flex items-center justify-center mx-auto mb-4">
+                        <span class="material-symbols-outlined text-[28px]">handshake</span>
+                    </div>
+                    <h3 class="font-title-md text-title-md font-bold mb-2">2. 가격 협상</h3>
+                    <p class="text-secondary text-sm">공급업체와 직접 소통하고 가격을 제안하세요. 대부분 24시간 내 응답합니다.</p>
+                </div>
+                <div class="text-center px-4">
+                    <div class="w-16 h-16 rounded-full bg-primary text-on-primary flex items-center justify-center mx-auto mb-4">
+                        <span class="material-symbols-outlined text-[28px]">local_shipping</span>
+                    </div>
+                    <h3 class="font-title-md text-title-md font-bold mb-2">3. 배송 & 판매</h3>
+                    <p class="text-secondary text-sm">안전한 결제 후 3-5일 내 배송. 받은 상품을 리셀하여 수익을 창출하세요.</p>
+                </div>
+            </div>
+            <div class="text-center mt-10">
+                <a href="signup.html" class="inline-flex items-center gap-2 bg-primary text-on-primary px-8 py-4 rounded-full font-title-md text-title-md hover:bg-on-surface transition-colors">
+                    무료로 시작하기 <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Start Reselling CTA -->
+    <section class="w-full bg-surface-container-low border-t border-outline-variant py-16 md:py-20">
+        <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+            <div class="max-w-2xl mx-auto text-center mb-10">
+                <h2 class="font-display-lg text-display-lg font-bold mb-4">Figtree Club에서 빈티지 리셀링을 시작하세요</h2>
+                <p class="text-secondary font-body-lg text-body-lg">첫 번째 공급업체를 찾는 것이 리셀링에서 가장 어려운 부분입니다. Figtree Club은 200개 이상의 검증된 빈티지 공급업체에 대한 접근을 제공하여 이를 쉽게 만들어줍니다. 초보자 친화적인 번들로 소량부터 시작하고, 무엇이 잘 팔리는지 테스트하며, 자신만의 속도로 성장하세요.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 max-w-3xl mx-auto">
+                <div class="flex items-start gap-3">
+                    <span class="material-symbols-outlined text-primary text-[24px] mt-0.5" style="font-variation-settings:'FILL' 1">check_circle</span>
+                    <div>
+                        <p class="font-title-md text-title-md font-bold text-sm">소량 주문 가능</p>
+                        <p class="text-secondary text-sm mt-1">최소 10-20개부터 시작하여 리스크를 줄이세요</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <span class="material-symbols-outlined text-primary text-[24px] mt-0.5" style="font-variation-settings:'FILL' 1">check_circle</span>
+                    <div>
+                        <p class="font-title-md text-title-md font-bold text-sm">검증된 공급업체</p>
+                        <p class="text-secondary text-sm mt-1">평점과 리뷰가 있는 검증된 공급업체만 입점</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <span class="material-symbols-outlined text-primary text-[24px] mt-0.5" style="font-variation-settings:'FILL' 1">check_circle</span>
+                    <div>
+                        <p class="font-title-md text-title-md font-bold text-sm">구매자 보호 포함</p>
+                        <p class="text-secondary text-sm mt-1">모든 주문에 구매자 보호가 기본 적용됩니다</p>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center">
+                <a href="signup.html" class="inline-flex items-center gap-2 bg-primary text-on-primary px-8 py-4 rounded-full font-title-md text-title-md hover:bg-on-surface transition-colors">
+                    무료로 시작하기 <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sell on Figtree CTA (for suppliers) -->
+    <section class="w-full bg-surface border-t border-outline-variant py-12 md:py-16">
+        <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop flex flex-col md:flex-row items-center justify-between gap-8">
+            <div>
+                <h2 class="font-display-lg text-headline-lg md:text-display-lg font-bold mb-2">도매 공급업체이신가요?</h2>
+                <p class="text-secondary max-w-lg">Figtree Club에서 아시아 전역의 리셀러들에게 직접 판매하세요. 무료 가입, 수수료 업계 최저, 간편한 재고 관리 도구를 제공합니다.</p>
+            </div>
+            <a href="seller/login.html" class="inline-flex items-center gap-2 bg-primary text-on-primary px-8 py-4 rounded-full font-title-md text-title-md hover:bg-on-surface transition-colors flex-shrink-0">
+                <span class="material-symbols-outlined text-[20px]">storefront</span>
+                판매자 센터 시작하기
+            </a>
+        </div>
+    </section>
+
     <!-- Footer Component -->
     <footer
         class="bg-surface-container-lowest dark:bg-inverse-surface border-t border-outline-variant dark:border-outline mt-auto">
@@ -413,8 +1012,10 @@
                     href="#">고객 센터</a>
                 <a class="text-secondary dark:text-on-surface-variant font-body-sm text-body-sm hover:text-primary dark:hover:text-on-surface transition-colors"
                     href="#">운송 파트너</a>
+                <a class="text-secondary dark:text-on-surface-variant font-body-sm text-body-sm hover:text-primary dark:hover:text-on-surface transition-colors font-semibold"
+                    href="seller/login.html">판매자 센터</a>
             </div>
-            <div class="text-secondary dark:text-on-surface-variant font-body-sm text-body-sm">© 2024 Figtree Club. 모든
+            <div class="text-secondary dark:text-on-surface-variant font-body-sm text-body-sm">© 2026 Figtree Club. 모든
                 권리 보유.</div>
         </div>
     </footer>
