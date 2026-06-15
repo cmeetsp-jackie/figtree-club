@@ -185,7 +185,13 @@
                         </div>
                         <div id="profileView">
                             <div class="flex items-center gap-3 mb-3">
-                                <div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center font-bold" id="profileAvatar">-</div>
+                                <div class="relative group cursor-pointer" onclick="document.getElementById('avatarInput').click()">
+                                    <div class="w-14 h-14 rounded-full bg-surface-container-high flex items-center justify-center font-bold overflow-hidden" id="profileAvatar">-</div>
+                                    <div class="absolute inset-0 rounded-full bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <span class="material-symbols-outlined text-white text-[18px]">photo_camera</span>
+                                    </div>
+                                    <input type="file" id="avatarInput" accept="image/*" class="hidden">
+                                </div>
                                 <div>
                                     <p class="text-sm font-bold" id="profileName">-</p>
                                     <p class="text-xs text-secondary" id="profileCountry">-</p>
@@ -301,8 +307,29 @@
             if (greeting) greeting.textContent = '안녕하세요, ' + seller.business_name + '님';
 
             // Profile card
+            const avatarEl = document.getElementById('profileAvatar');
             const initials = seller.business_name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
-            document.getElementById('profileAvatar').textContent = initials;
+            if (seller.avatar_url) {
+                avatarEl.innerHTML = '<img src="' + seller.avatar_url + '" class="w-full h-full object-cover">';
+            } else {
+                avatarEl.textContent = initials;
+            }
+
+            // Avatar upload
+            document.getElementById('avatarInput').addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if (!file || !file.type.startsWith('image/')) return;
+                try {
+                    avatarEl.innerHTML = '<span class="material-symbols-outlined text-secondary animate-spin">progress_activity</span>';
+                    const url = await DB.uploadMedia(file, 'sellers/' + seller.id + '/avatar');
+                    await db.from('sellers').update({ avatar_url: url }).eq('id', seller.id);
+                    avatarEl.innerHTML = '<img src="' + url + '" class="w-full h-full object-cover">';
+                    seller.avatar_url = url;
+                } catch (err) {
+                    alert('업로드 실패: ' + err.message);
+                    avatarEl.textContent = initials;
+                }
+            });
             document.getElementById('profileName').textContent = seller.business_name;
             document.getElementById('profileCountry').textContent = seller.country || '-';
             document.getElementById('profileDesc').textContent = seller.description || '소개를 작성해주세요. 구매자에게 노출됩니다.';
