@@ -62,7 +62,12 @@
                 </div>
                 <div>
                     <label class="block text-sm font-semibold mb-1.5">비밀번호</label>
-                    <input type="password" class="w-full ghost-input rounded-lg px-4 py-3 text-sm" placeholder="6자 이상" required minlength="6">
+                    <input type="password" id="pw1" class="w-full ghost-input rounded-lg px-4 py-3 text-sm" placeholder="6자 이상" required minlength="6">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-1.5">비밀번호 확인</label>
+                    <input type="password" id="pw2" class="w-full ghost-input rounded-lg px-4 py-3 text-sm" placeholder="비밀번호를 다시 입력해주세요" required minlength="6">
+                    <p id="pwError" class="text-xs text-error mt-1 hidden">비밀번호가 일치하지 않습니다.</p>
                 </div>
                 <div>
                     <label class="block text-sm font-semibold mb-1.5">사업 위치</label>
@@ -124,8 +129,16 @@
             const businessName = inputs[1].value.trim();
             const email = inputs[2].value.trim();
             const phone = inputs[3].value.trim();
-            const password = inputs[4].value;
-            const country = inputs[5].value;
+            const password = document.getElementById('pw1').value;
+            const pw2 = document.getElementById('pw2').value;
+            const pwError = document.getElementById('pwError');
+            if (password !== pw2) {
+                pwError.classList.remove('hidden');
+                document.getElementById('pw2').focus();
+                return;
+            }
+            pwError.classList.add('hidden');
+            const country = inputs[6].value;
             const categories = [...e.target.querySelectorAll('input[type="checkbox"]:checked')].map(c => c.value);
 
             if (!contactName || !businessName || !email || !password) {
