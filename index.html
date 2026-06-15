@@ -44,9 +44,9 @@
                         "secondary-fixed-dim": "#c7c6c6",
                         "secondary-fixed": "#e4e2e2",
                         "surface-container-low": "#f6f3f2",
-                        "outline-variant": "#cfc4c5",
+                        "outline-variant": "#e0e0e0",
                         "tertiary-container": "#1a1c1c",
-                        "background": "#fcf9f8",
+                        "background": "#fafafa",
                         "inverse-primary": "#c6c6c6",
                         "on-tertiary-fixed": "#1a1c1c",
                         "on-surface": "#1c1b1b",
@@ -57,7 +57,7 @@
                         "on-background": "#1c1b1b",
                         "on-tertiary-container": "#838484",
                         "secondary": "#5e5e5e",
-                        "surface": "#fcf9f8",
+                        "surface": "#ffffff",
                         "on-primary-fixed": "#1b1b1b",
                         "on-primary-fixed-variant": "#474747",
                         "outline": "#7e7576",
@@ -66,14 +66,17 @@
                         "primary-fixed-dim": "#c6c6c6",
                         "secondary-container": "#e1dfdf",
                         "on-primary-container": "#848484",
-                        "surface-container": "#f0eded",
-                        "inverse-on-surface": "#f3f0ef"
+                        "surface-container": "#f5f5f5",
+                        "inverse-on-surface": "#f3f0ef",
+                        "accent": "#FF3D00",
+                        "on-accent": "#ffffff"
                     },
                     "borderRadius": {
-                        "DEFAULT": "0.125rem",
-                        "lg": "0.25rem",
-                        "xl": "0.5rem",
-                        "full": "0.75rem"
+                        "DEFAULT": "0.5rem",
+                        "lg": "0.75rem",
+                        "xl": "1rem",
+                        "2xl": "1.5rem",
+                        "full": "9999px"
                     },
                     "spacing": {
                         "container-max": "1440px",
@@ -96,7 +99,7 @@
                     "fontSize": {
                         "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
                         "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
-                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "display-lg": ["52px", { "lineHeight": "58px", "letterSpacing": "-0.03em", "fontWeight": "900" }],
                         "title-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
                         "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
                         "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
@@ -120,8 +123,13 @@
             box-shadow: none;
         }
 
+        .bundle-card {
+            border-radius: 16px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
         .bundle-card:hover {
-            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.12);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.15);
         }
 
         .scroll-carousel {
@@ -144,7 +152,7 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             transition: all 0.2s;
         }
-        .carousel-btn:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .carousel-btn:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.15); transform: translateY(-50%) scale(1.05); }
         .carousel-btn.prev { left: -16px; }
         .carousel-btn.next { right: -16px; }
 
@@ -154,12 +162,13 @@
             font-size: 14px; font-weight: 600; color: #5e5e5e;
             transition: all 0.2s; cursor: pointer; text-decoration: none;
         }
-        .cat-chip:hover, .cat-chip.active {
+        .cat-chip:hover { background: #f5f5f5; color: #1c1b1b; border-color: #1c1b1b; }
+        .cat-chip.active {
             background: #000; color: #fff; border-color: #000;
         }
 
         .collection-card {
-            position: relative; border-radius: 12px; overflow: hidden;
+            position: relative; border-radius: 20px; overflow: hidden;
             cursor: pointer; aspect-ratio: 3/4;
         }
         .collection-card img {
@@ -174,10 +183,10 @@
 
         .vendor-card {
             flex: 0 0 300px; min-width: 300px;
-            border: 1px solid #cfc4c5; border-radius: 12px;
-            padding: 24px; background: #fff; cursor: pointer; transition: box-shadow .2s;
+            border: 1px solid #e0e0e0; border-radius: 20px;
+            padding: 24px; background: #fff; cursor: pointer; transition: transform .2s, box-shadow .2s;
         }
-        .vendor-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,.1); }
+        .vendor-card:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(0,0,0,.1); }
 
         .stat-number {
             font-family: Manrope, sans-serif; font-size: 48px; font-weight: 700;
@@ -193,7 +202,7 @@
 
 <body class="bg-background text-on-background font-body-lg min-h-screen flex flex-col">
     <!-- Top Banner -->
-    <div class="w-full bg-primary text-on-primary text-center py-3 text-sm font-semibold tracking-wide" style="animation:fadeIn .5s ease">
+    <div class="w-full bg-accent text-on-accent text-center py-3 text-sm font-bold tracking-wide" style="animation:fadeIn .5s ease">
         리셀러들이 최고의 재고를 소싱하는 곳 &mdash; <a href="signup.html" class="underline hover:opacity-80 transition-opacity">지금 가입하고 시작하기 &rarr;</a>
     </div>
     <!-- TopAppBar Component -->
@@ -246,14 +255,14 @@
         <div
             class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-16 md:py-24 grid grid-cols-1 md:grid-cols-2 gap-gutter items-center">
             <div>
-                <h1 class="font-display-lg text-display-lg mb-stack-md">프리미엄 도매.<br>리셀러를 위해 엄선된 상품.</h1>
+                <h1 class="font-display-lg text-display-lg mb-stack-md">프리미엄 도매.<br>리셀러를 위해<br>엄선된 상품<span class="text-accent">.</span></h1>
                 <p class="text-secondary mb-stack-lg max-w-md">검증된 공급업체를 발견하고, 직접 협상하며, 고품질 번들로 재고를 늘려보세요.</p>
                 <a class="inline-flex items-center gap-2 bg-primary text-on-primary px-6 py-3 rounded-full font-title-md text-title-md hover:bg-on-surface transition-colors"
                     href="#inventory">
                     번들 쇼핑하기 <span class="material-symbols-outlined text-sm">arrow_forward</span>
                 </a>
             </div>
-            <div class="relative h-64 md:h-96 rounded-xl overflow-hidden">
+            <div class="relative h-64 md:h-96 rounded-2xl overflow-hidden">
                 <img alt="Curated wholesale clothing bundles arranged neatly on a wooden floor in a bright, modern studio space, high quality lighting."
                     class="absolute inset-0 w-full h-full object-cover"
                     data-alt="A curated selection of high-end vintage clothing bundles laid out aesthetically on a clean, light oak wooden floor within a bright, modern photography studio. The lighting is soft, diffused, and high-key, creating a minimalist, editorial look. The color palette is composed of crisp whites, warm wood tones, and the muted colors of the premium garments. The mood is professional, sophisticated, and clean."
@@ -303,7 +312,7 @@
                     <article class="bundle-card flex flex-col bg-surface rounded-xl overflow-hidden border border-outline-variant transition-shadow cursor-pointer group" style="flex:0 0 280px;min-width:280px" onclick="location.href='bundleinfo.html'">
                         <div class="relative aspect-[4/5] bg-surface-container-low overflow-hidden">
                             <img alt="빈티지 나이키 윈드브레이커" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDq6pQCAWRa3F8PvB1ziLVN1JqOkmYxqJfwV1MA1JS2SImODwiKa9dGg6BwoYSKnhMERvNlbqXaW2462LYfxUsD20i8OEN0oBQ4CiRB9R8QeGyRPX65SygvzP9QIMbUbXxWYVZ6uHeHmZ4K27O9xGHck72Wg6VKkuQ1lcj_Gonmdpnhl_FTH5PfwjL3qKa3J0Upu75EU_45_UUWCRnClNY5XLothhed4A_yBJ_73jEsHzmIPcyKDFbeTkTE38zPPKbPCs1tni2Z5Ij2">
-                            <div class="absolute top-3 left-3 bg-error text-on-error px-2 py-1 rounded text-xs font-label-caps tracking-wider">NEW</div>
+                            <div class="absolute top-3 left-3 bg-accent text-on-accent px-2.5 py-1 rounded-full text-xs font-label-caps tracking-wider">NEW</div>
                         </div>
                         <div class="p-stack-md flex flex-col gap-1">
                             <h4 class="font-title-md text-title-md text-primary truncate">빈티지 나이키 윈드브레이커</h4>
@@ -318,7 +327,7 @@
                     <article class="bundle-card flex flex-col bg-surface rounded-xl overflow-hidden border border-outline-variant transition-shadow cursor-pointer group" style="flex:0 0 280px;min-width:280px" onclick="location.href='bundleinfo.html'">
                         <div class="relative aspect-[4/5] bg-surface-container-low overflow-hidden">
                             <img alt="챔피온 리버스위브 후디" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA45B3LLTpuvfAkoZVlWAYQrNpSeWnXVQoYE6hpV3FRYA3GP1VEuSGtAPfMy1Fl1bibyojJXd_LypuG2gpGwgQ2-mh0tWjNGACQgqHGY4zh9-Ypi0btS8hBKXggCLLk2cVGqrmpHHoDBCvjX8R54LTZpedz8n4FaCo9AOeaZvSS3y7xmy2e9nAahdh6wqfoflbWOWo3_TsBRtM5ctLih1Z2dExUJ4W_OpoWiYdumFj57__qtQarPCgPMaHlom4w8dXlJUb6_uHK9bnD">
-                            <div class="absolute top-3 left-3 bg-error text-on-error px-2 py-1 rounded text-xs font-label-caps tracking-wider">NEW</div>
+                            <div class="absolute top-3 left-3 bg-accent text-on-accent px-2.5 py-1 rounded-full text-xs font-label-caps tracking-wider">NEW</div>
                         </div>
                         <div class="p-stack-md flex flex-col gap-1">
                             <h4 class="font-title-md text-title-md text-primary truncate">챔피온 리버스위브 후디</h4>
@@ -334,7 +343,7 @@
                     <article class="bundle-card flex flex-col bg-surface rounded-xl overflow-hidden border border-outline-variant transition-shadow cursor-pointer group" style="flex:0 0 280px;min-width:280px" onclick="location.href='bundleinfo.html'">
                         <div class="relative aspect-[4/5] bg-surface-container-low overflow-hidden">
                             <img alt="리바이스 501 데님" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3dUedUkz7cCFBb5LJ2Z3hC0Af9iafIqxkwsKJohDErDs6ptVo2Ne2oQP5YwPx4cUahpqC3jrSb2hr7i7flbEsaQEvad_qRPu5R9vwrNXHL3qpNAkqkb4kFDTRkNmgMpEJrPLoLBWXUAZ3V04x45xO3kUKPHvXemzwpIeEw92HCOhG_AbFGvqZ0DSsUk3guYxQGPLnHASO6tvOk-Vi3yvcUKTaJ5EGOeTGLPFTQps_anW86a4cu_lIJ4ol8H1hy8T0KN9-oHK2uore">
-                            <div class="absolute top-3 left-3 bg-error text-on-error px-2 py-1 rounded text-xs font-label-caps tracking-wider">NEW</div>
+                            <div class="absolute top-3 left-3 bg-accent text-on-accent px-2.5 py-1 rounded-full text-xs font-label-caps tracking-wider">NEW</div>
                         </div>
                         <div class="p-stack-md flex flex-col gap-1">
                             <h4 class="font-title-md text-title-md text-primary truncate">리바이스 501 데님 믹스</h4>
@@ -349,7 +358,7 @@
                     <article class="bundle-card flex flex-col bg-surface rounded-xl overflow-hidden border border-outline-variant transition-shadow cursor-pointer group" style="flex:0 0 280px;min-width:280px" onclick="location.href='bundleinfo.html'">
                         <div class="relative aspect-[4/5] bg-surface-container-low overflow-hidden">
                             <img alt="아디다스 트랙탑" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfsg2lr9aWq5MIGyHCzpZxmRKPFGuTiKiqx6SW4MPH11ZjPmSytcFqI6AePwFouqn4KejDkisnKJWxZM_e9BfAV314K_WLHARDj64eNZKbe1v94Hf5ltyW37ByxV-z84u41BrpBGxVwcUjDCnYYqPDj8Nu1TzzIkuSQxVizFY1ghCcT3qP_9vNEDVvyzmgf1cdUBoQbPocdZcpNAp7vb0M5Zp2B5_3Ch2XEvs9v-Nr83_A2ekcTnb_mmYD-06IAN6ymAfxhkvqqw09">
-                            <div class="absolute top-3 left-3 bg-error text-on-error px-2 py-1 rounded text-xs font-label-caps tracking-wider">NEW</div>
+                            <div class="absolute top-3 left-3 bg-accent text-on-accent px-2.5 py-1 rounded-full text-xs font-label-caps tracking-wider">NEW</div>
                         </div>
                         <div class="p-stack-md flex flex-col gap-1">
                             <h4 class="font-title-md text-title-md text-primary truncate">아디다스 빈티지 트랙탑</h4>
@@ -365,7 +374,7 @@
                     <article class="bundle-card flex flex-col bg-surface rounded-xl overflow-hidden border border-outline-variant transition-shadow cursor-pointer group" style="flex:0 0 280px;min-width:280px" onclick="location.href='bundleinfo.html'">
                         <div class="relative aspect-[4/5] bg-surface-container-low overflow-hidden">
                             <img alt="카하트 워크웨어" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDq6pQCAWRa3F8PvB1ziLVN1JqOkmYxqJfwV1MA1JS2SImODwiKa9dGg6BwoYSKnhMERvNlbqXaW2462LYfxUsD20i8OEN0oBQ4CiRB9R8QeGyRPX65SygvzP9QIMbUbXxWYVZ6uHeHmZ4K27O9xGHck72Wg6VKkuQ1lcj_Gonmdpnhl_FTH5PfwjL3qKa3J0Upu75EU_45_UUWCRnClNY5XLothhed4A_yBJ_73jEsHzmIPcyKDFbeTkTE38zPPKbPCs1tni2Z5Ij2">
-                            <div class="absolute top-3 left-3 bg-error text-on-error px-2 py-1 rounded text-xs font-label-caps tracking-wider">NEW</div>
+                            <div class="absolute top-3 left-3 bg-accent text-on-accent px-2.5 py-1 rounded-full text-xs font-label-caps tracking-wider">NEW</div>
                         </div>
                         <div class="p-stack-md flex flex-col gap-1">
                             <h4 class="font-title-md text-title-md text-primary truncate">카하트 워크웨어 믹스</h4>
@@ -721,7 +730,7 @@
                             data-alt="A collection of classic Ralph Lauren polo shirts in various colors meticulously flat-laid on a clean, seamless light grey backdrop. The lighting is even and studio-quality, creating a high-end minimalist editorial feel. The overall aesthetic is clean, professional, and highlights the premium quality of the garments."
                             src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfsg2lr9aWq5MIGyHCzpZxmRKPFGuTiKiqx6SW4MPH11ZjPmSytcFqI6AePwFouqn4KejDkisnKJWxZM_e9BfAV314K_WLHARDj64eNZKbe1v94Hf5ltyW37ByxV-z84u41BrpBGxVwcUjDCnYYqPDj8Nu1TzzIkuSQxVizFY1ghCcT3qP_9vNEDVvyzmgf1cdUBoQbPocdZcpNAp7vb0M5Zp2B5_3Ch2XEvs9v-Nr83_A2ekcTnb_mmYD-06IAN6ymAfxhkvqqw09">
                         <div
-                            class="absolute top-3 left-3 bg-primary text-on-primary px-2 py-1 rounded text-xs font-label-caps tracking-wider">
+                            class="absolute top-3 left-3 bg-accent text-on-accent px-2.5 py-1 rounded-full text-xs font-label-caps tracking-wider">
                             38% 할인</div>
                         <button
                             class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface/80 backdrop-blur flex items-center justify-center text-primary hover:bg-surface transition-colors">
@@ -783,7 +792,7 @@
                             data-alt="A stack of folded, colorful athletic shorts neatly presented on a textured grey concrete surface. The lighting is crisp and overhead, highlighting the fabric details and creating a modern, minimalist athletic aesthetic. The composition is structured and clean, typical of high-end catalog photography."
                             src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3dUedUkz7cCFBb5LJ2Z3hC0Af9iafIqxkwsKJohDErDs6ptVo2Ne2oQP5YwPx4cUahpqC3jrSb2hr7i7flbEsaQEvad_qRPu5R9vwrNXHL3qpNAkqkb4kFDTRkNmgMpEJrPLoLBWXUAZ3V04x45xO3kUKPHvXemzwpIeEw92HCOhG_AbFGvqZ0DSsUk3guYxQGPLnHASO6tvOk-Vi3yvcUKTaJ5EGOeTGLPFTQps_anW86a4cu_lIJ4ol8H1hy8T0KN9-oHK2uore">
                         <div
-                            class="absolute top-3 left-3 bg-primary text-on-primary px-2 py-1 rounded text-xs font-label-caps tracking-wider">
+                            class="absolute top-3 left-3 bg-accent text-on-accent px-2.5 py-1 rounded-full text-xs font-label-caps tracking-wider">
                             27% 할인</div>
                         <button
                             class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface/80 backdrop-blur flex items-center justify-center text-primary hover:bg-surface transition-colors">
@@ -813,7 +822,7 @@
                     <div class="relative aspect-[4/5] bg-surface-container-low overflow-hidden">
                         <img alt="챔피온 리버스위브 후디 번들" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                             src="https://lh3.googleusercontent.com/aida-public/AB6AXuA45B3LLTpuvfAkoZVlWAYQrNpSeWnXVQoYE6hpV3FRYA3GP1VEuSGtAPfMy1Fl1bibyojJXd_LypuG2gpGwgQ2-mh0tWjNGACQgqHGY4zh9-Ypi0btS8hBKXggCLLk2cVGqrmpHHoDBCvjX8R54LTZpedz8n4FaCo9AOeaZvSS3y7xmy2e9nAahdh6wqfoflbWOWo3_TsBRtM5ctLih1Z2dExUJ4W_OpoWiYdumFj57__qtQarPCgPMaHlom4w8dXlJUb6_uHK9bnD">
-                        <div class="absolute top-3 left-3 bg-primary text-on-primary px-2 py-1 rounded text-xs font-label-caps tracking-wider">19% 할인</div>
+                        <div class="absolute top-3 left-3 bg-accent text-on-accent px-2.5 py-1 rounded-full text-xs font-label-caps tracking-wider">19% 할인</div>
                         <button class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface/80 backdrop-blur flex items-center justify-center text-primary hover:bg-surface transition-colors">
                             <span class="material-symbols-outlined text-[18px]">favorite</span>
                         </button>
@@ -840,7 +849,7 @@
                     <div class="relative aspect-[4/5] bg-surface-container-low overflow-hidden">
                         <img alt="리바이스 501 데님 믹스" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                             src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3dUedUkz7cCFBb5LJ2Z3hC0Af9iafIqxkwsKJohDErDs6ptVo2Ne2oQP5YwPx4cUahpqC3jrSb2hr7i7flbEsaQEvad_qRPu5R9vwrNXHL3qpNAkqkb4kFDTRkNmgMpEJrPLoLBWXUAZ3V04x45xO3kUKPHvXemzwpIeEw92HCOhG_AbFGvqZ0DSsUk3guYxQGPLnHASO6tvOk-Vi3yvcUKTaJ5EGOeTGLPFTQps_anW86a4cu_lIJ4ol8H1hy8T0KN9-oHK2uore">
-                        <div class="absolute top-3 left-3 bg-primary text-on-primary px-2 py-1 rounded text-xs font-label-caps tracking-wider">45% 할인</div>
+                        <div class="absolute top-3 left-3 bg-accent text-on-accent px-2.5 py-1 rounded-full text-xs font-label-caps tracking-wider">45% 할인</div>
                         <button class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface/80 backdrop-blur flex items-center justify-center text-primary hover:bg-surface transition-colors">
                             <span class="material-symbols-outlined text-[18px]">favorite</span>
                         </button>
@@ -867,7 +876,7 @@
                     <div class="relative aspect-[4/5] bg-surface-container-low overflow-hidden">
                         <img alt="아디다스 빈티지 트랙탑" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                             src="https://lh3.googleusercontent.com/aida-public/AB6AXuDq6pQCAWRa3F8PvB1ziLVN1JqOkmYxqJfwV1MA1JS2SImODwiKa9dGg6BwoYSKnhMERvNlbqXaW2462LYfxUsD20i8OEN0oBQ4CiRB9R8QeGyRPX65SygvzP9QIMbUbXxWYVZ6uHeHmZ4K27O9xGHck72Wg6VKkuQ1lcj_Gonmdpnhl_FTH5PfwjL3qKa3J0Upu75EU_45_UUWCRnClNY5XLothhed4A_yBJ_73jEsHzmIPcyKDFbeTkTE38zPPKbPCs1tni2Z5Ij2">
-                        <div class="absolute top-3 left-3 bg-primary text-on-primary px-2 py-1 rounded text-xs font-label-caps tracking-wider">29% 할인</div>
+                        <div class="absolute top-3 left-3 bg-accent text-on-accent px-2.5 py-1 rounded-full text-xs font-label-caps tracking-wider">29% 할인</div>
                         <button class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface/80 backdrop-blur flex items-center justify-center text-primary hover:bg-surface transition-colors">
                             <span class="material-symbols-outlined text-[18px]">favorite</span>
                         </button>
